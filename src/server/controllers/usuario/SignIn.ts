@@ -11,7 +11,7 @@ import { InternalServerError, JWTService, PasswordCrypto, UnauthorizedError } fr
  * Propriedades da requisição do endpoint de signIn.
  * Contém as propriedades do corpo da requisição, exceto o id e o nome do usuário.
  */
-interface IBodyProps extends Omit<IUsuario, "nome" | "id" > {}
+interface IBodyProps extends Omit<IUsuario, "nome" | "id" | "isValid" | "uniqueString"> {}
 
 
 /**

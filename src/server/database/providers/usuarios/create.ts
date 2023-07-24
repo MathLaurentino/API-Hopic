@@ -3,7 +3,7 @@ import { IUsuario } from "../../models";
 import { ETableNames } from "../../ETableNames";
 import { InternalServerError, PasswordCrypto } from "../../../shared/services";
 
-export const create = async (usuario: Omit<IUsuario, "id">): Promise<number> => {
+export const create = async (usuario: Omit<IUsuario, "id" >): Promise<number> => {
 
     const hashedPassword = await PasswordCrypto.hashPassword(usuario.senha);
 
