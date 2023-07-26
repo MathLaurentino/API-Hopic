@@ -41,20 +41,22 @@ export const signIn = async (req: Request<{},{}, IBodyProps>, res: Response): Pr
 
     // caso a senha não corresponda
     if (!passwordMatch) {
-        throw new UnauthorizedError("email ou senha inválidos");
+        throw new UnauthorizedError("Email ou senha inválidos");
     } 
-    
-    // caso a autentificação seja bem sucedida
-    else {
-        // tenta gerar o token de acesso
-        const accessToken = JWTService.sign({uid: Number(usuario.id)});
 
-        // caso tenha dado erro ao gerar token de acesso
-        if (accessToken === "JWT_SECRET_NOT_FOUND") {
-            throw new InternalServerError();
-        }
-
-        // se gerar o token com secesso, retorna o token de acesso
-        return res.status(StatusCodes.OK).json({ accessToken });
+    if (!usuario.isValid) {
+        throw new UnauthorizedError("Email não autentificado");
     }
+    
+    // tenta gerar o token de acesso
+    const accessToken = JWTService.sign({uid: Number(usuario.id)});
+
+    // caso tenha dado erro ao gerar token de acesso
+    if (accessToken === "JWT_SECRET_NOT_FOUND") {
+        throw new InternalServerError();
+    }
+
+    // se gerar o token com secesso, retorna o token de acesso
+    return res.status(StatusCodes.OK).json({ accessToken });
+    
 };

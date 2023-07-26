@@ -10,5 +10,6 @@ router.get("/", (req, res) => {
 
 router.post("/cadastrar", UsuarioController.signUpValidation, UsuarioController.signUp);
 router.post("/entrar", UsuarioController.signInValidation, UsuarioController.signIn);
+router.get("/validateEmail/:chave", UsuarioController.validateEmailValidation, UsuarioController.validateEmail);
 
 export { router };
