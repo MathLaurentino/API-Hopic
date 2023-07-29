@@ -1,5 +1,4 @@
 import { Router } from "express";
-// import { sanitizeInput } from "../shared/middleware";
 import { UsuarioController, ProdutoController } from "./../controllers";
 import { uploadImage, ensureAuthenticated, sanitizeInput } from "../shared/middleware";
 
@@ -14,6 +13,7 @@ router.post("/singin", UsuarioController.signInValidation, UsuarioController.sig
 router.get("/validateEmail/:chave", UsuarioController.validateEmailValidation, UsuarioController.validateEmail);
 
 router.post("/produtos", ensureAuthenticated, sanitizeInput, uploadImage.single("image"), ProdutoController.createValidation, ProdutoController.create);
-
+router.delete("/produtos/:id", ensureAuthenticated, ProdutoController.deleteByIdValidation, ProdutoController.deleteById);
+router.get("/produtos/:id", ensureAuthenticated, ProdutoController.getByIdValidation, ProdutoController.getById);
 
 export { router };

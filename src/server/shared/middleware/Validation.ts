@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RequestHandler } from "express";
 import { AnyObject, Maybe, ObjectSchema, ValidationError } from "yup";
 import { StatusCodes } from "http-status-codes";

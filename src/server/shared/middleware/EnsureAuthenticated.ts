@@ -46,7 +46,7 @@ export const ensureAuthenticated: RequestHandler = async (req, res, next) => {
     }
 
     // torna o id do usuário acessivel para as outras function na cadeia de execução.
-    req.headers.idUsuario = jwtData.uid.toString();
+    req.headers.user_id = jwtData.uid.toString();
 
     return next();
 };

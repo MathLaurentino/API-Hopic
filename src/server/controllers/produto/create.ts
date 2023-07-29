@@ -17,7 +17,7 @@ export const createValidation = validation((getSchema) => ({
 export const create = async (req: Request<{}, {}, IBodyProps>, res: Response): Promise<Response> => {
 
     const { name, price } = req.body;
-    const user_id = Number(req.headers.idUsuario); 
+    const user_id = Number(req.headers.user_id); 
 
     let imageAddress:string | null = null;
     if (req.file) {
