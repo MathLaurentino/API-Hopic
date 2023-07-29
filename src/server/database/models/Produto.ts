@@ -1,6 +1,7 @@
 export interface IProduto{
     id: number;
-    usuario_id: number;
-    nome: string;
-    preco: number;
+    user_id: number;
+    name: string;
+    price: number;
+    imageAddress:string | null;
 }

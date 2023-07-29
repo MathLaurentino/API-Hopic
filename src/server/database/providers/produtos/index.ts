@@ -3,11 +3,13 @@ import * as create from "./create";
 // import * as getById from "./getById";
 // import * as deleteById from "./deleteById";
 // import * as updateById from "./updateById";
+// import * as validateClientAccess from "./validateClientAccess";
 
-export const ProdutoController = {
+export const ProdutoProvider = {
     ...create,
     // ...getAll,
     // ...getById,
     // ...deleteById,
     // ...updateById,
+    // ...validateClientAccess,
 };

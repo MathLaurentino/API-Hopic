@@ -10,7 +10,7 @@ export const validateEmail = async (chave: string): Promise<void> => {
         throw new BadRequestError("chave invalida");
     }
 
-    const update = await Knex(ETableNames.usuario).where("id", result.id).update({isValid: 1, uniqueString: null});
+    const update = await Knex(ETableNames.usuario).where("id", result.id).update({isValid: true, uniqueString: null});
 
     if (update > 0) return;
 
