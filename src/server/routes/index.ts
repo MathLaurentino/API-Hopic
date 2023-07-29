@@ -15,5 +15,7 @@ router.get("/validateEmail/:chave", UsuarioController.validateEmailValidation, U
 router.post("/produtos", ensureAuthenticated, sanitizeInput, uploadImage.single("image"), ProdutoController.createValidation, ProdutoController.create);
 router.delete("/produtos/:id", ensureAuthenticated, ProdutoController.deleteByIdValidation, ProdutoController.deleteById);
 router.get("/produtos/:id", ensureAuthenticated, ProdutoController.getByIdValidation, ProdutoController.getById);
+router.get("/produtos", ensureAuthenticated, ProdutoController.getAll);
+
 
 export { router };
