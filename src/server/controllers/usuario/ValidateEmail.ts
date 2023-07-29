@@ -19,8 +19,6 @@ export const validateEmail = async (req: Request<IParamsProps>, res: Response): 
 
     const chave = req.params.chave;
 
-    console.log(chave);
-
     if (typeof chave === "undefined") {
         throw new BadRequestError("Parâmetro 'id' precisa ser informado");
     }

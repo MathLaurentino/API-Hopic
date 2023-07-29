@@ -17,12 +17,10 @@ export const createValidation = validation((getSchema) => ({
 export const create = async (req: Request<{}, {}, IBodyProps>, res: Response): Promise<Response> => {
 
     const { name, price } = req.body;
-    const user_id = 1; //Number(req.headers.idUsuario);
-    let imageAddress:string | null = null;
+    const user_id = Number(req.headers.idUsuario); 
 
+    let imageAddress:string | null = null;
     if (req.file) {
-        // console.log(req.body);
-        // console.log(req.file.filename);
         imageAddress = req.file.filename;
     }
 
@@ -36,4 +34,3 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response): P
     return res.status(StatusCodes.CREATED).json(result); // devolve o id criado
     
 };
-

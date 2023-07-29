@@ -1,18 +1,11 @@
 import multer from "multer";
 import * as path from "path";
-// import fs from "fs";
-
-// const uploadDir = "./../../../../imgs"; 
-
-// // Verifica se o diretório de upload existe, caso contrário, cria-o
-// if (!fs.existsSync(uploadDir)) {
-//     fs.mkdirSync(uploadDir, { recursive: true });
-// }
 
 export const uploadImage = (multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
-            cb(null, "../../../../imgs");
+            const destinationPath = path.join(__dirname, "..", "..", "..", "..", "imgs");
+            cb(null, destinationPath);
         },
         filename: (req, file, cb) => {
             const imageName = Date.now().toString() + "_" + path.extname(file.originalname);
