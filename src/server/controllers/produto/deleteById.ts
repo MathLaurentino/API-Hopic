@@ -27,7 +27,7 @@ export const deleteById = async (req: Request<IParamsProps>, res: Response): Pro
 
     const isClientAuthorized = await  ProdutoProvider.validateClientAccess(produtoId, userId);
 
-    if (!isClientAuthorized) {
+    if (isClientAuthorized) {
         const userProduto = await ProdutoProvider.getbyId(produtoId);
 
         // se o produto tem uma img no sistema, ele é apagado

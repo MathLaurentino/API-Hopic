@@ -8,7 +8,7 @@ export const uploadImage = (multer({
             cb(null, destinationPath);
         },
         filename: (req, file, cb) => {
-            const imageName = Date.now().toString() + "_" + path.extname(file.originalname);
+            const imageName = Date.now().toString() + "_" + file.originalname;
             req.body.imageAddress = imageName;
             cb(null, imageName);
         }

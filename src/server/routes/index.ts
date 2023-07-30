@@ -12,10 +12,10 @@ router.post("/singup", UsuarioController.signUpValidation, UsuarioController.sig
 router.post("/singin", UsuarioController.signInValidation, UsuarioController.signIn);
 router.get("/validateEmail/:chave", UsuarioController.validateEmailValidation, UsuarioController.validateEmail);
 
+router.put("/produtos/:id", ensureAuthenticated, sanitizeInput, uploadImage.single("image"), ProdutoController.updateByIdValidation, ProdutoController.updateById);
 router.post("/produtos", ensureAuthenticated, sanitizeInput, uploadImage.single("image"), ProdutoController.createValidation, ProdutoController.create);
 router.delete("/produtos/:id", ensureAuthenticated, ProdutoController.deleteByIdValidation, ProdutoController.deleteById);
 router.get("/produtos/:id", ensureAuthenticated, ProdutoController.getByIdValidation, ProdutoController.getById);
 router.get("/produtos", ensureAuthenticated, ProdutoController.getAll);
-
 
 export { router };

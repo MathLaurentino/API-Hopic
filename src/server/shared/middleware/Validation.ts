@@ -2,6 +2,7 @@
 import { RequestHandler } from "express";
 import { AnyObject, Maybe, ObjectSchema, ValidationError } from "yup";
 import { StatusCodes } from "http-status-codes";
+import { removeImageFromFileSystem } from "../services";
 
 /* Tipo de propriedade que determina qual parte da requisição deve ser validada. */
 type TProperty = "body" | "header" | "params" | "query";
@@ -53,6 +54,9 @@ export const validation: TValidation = (getAllSchemas) => async (req, res, next)
     if (Object.entries(errorsResult).length === 0) {
         return next();
     } else {
+        if (req.file) {
+            removeImageFromFileSystem(req.file.filename);
+        }
         return res.status(StatusCodes.BAD_REQUEST).json({ errors: errorsResult });
     }
 };

@@ -10,7 +10,7 @@ interface IBodyProps extends Omit<IProduto, "id" | "user_id" | "imageAddress"> {
 export const createValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({
         name: yup.string().required().min(2),
-        price: yup.number().integer().required().moreThan(0),
+        price: yup.number().required().moreThan(0),
     })),
 })); 
 
