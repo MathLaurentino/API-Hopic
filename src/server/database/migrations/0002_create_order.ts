@@ -5,7 +5,7 @@ export async function up(knex: Knex) {
 
     return knex
         .schema
-        .createTable(ETableNames.produto, table => {
+        .createTable(ETableNames.order, table => {
             table.bigIncrements("id").primary().index();
             table.bigInteger("user_id")
                 .index()
@@ -14,22 +14,24 @@ export async function up(knex: Knex) {
                 .inTable(ETableNames.usuario) // faz referencia a tabela cidade campo "id"
                 .onUpdate("CASCADE") // caso o id da cidade seja mudado, muda aqui também
                 .onDelete("RESTRICT"); // não deixa que o registro usuario seja apagado
-            table.string("name").index().notNullable().checkLength(">=", 1);
-            table.decimal("price", 10, 2).index().notNullable();
-            table.string("imageAddress").index().nullable();
+            table.enum("status", ["received", "paid"]).index().notNullable().defaultTo("received");
+            table.decimal("total_price", 10, 2).notNullable();
+            // table.string("paymentIntent_id");
+            table.dateTime("created_at").notNullable();
 
-            table.comment("Tabela usada para armazenar Produtos no sistema.");
+            table.comment("Tabela usada para armazenar Orders do sistema.");
         })
         .then(() => {
-            console.log(`# Created table ${ETableNames.produto}`);
+            console.log(`# Created table ${ETableNames.order}`);
         });
 }
+
 
 export async function down(knex: Knex) {
     return knex
         .schema
-        .dropTable(ETableNames.produto)
+        .dropTable(ETableNames.order)
         .then(() => {
-            console.log(`# Dropped table ${ETableNames.produto}`); 
+            console.log(`# Dropped table ${ETableNames.order}`); 
         });
 }
