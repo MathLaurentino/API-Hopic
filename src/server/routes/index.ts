@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { UsuarioController, ProdutoController } from "./../controllers";
+import { UsuarioController, ProdutoController, OrderController} from "./../controllers";
 import { uploadImage, sanitizeInput, ensureAuthenticated } from "../shared/middleware";
 
 const router = Router();
@@ -19,5 +19,7 @@ router.post("/produtos", sanitizeInput, uploadImage.single("image"), ProdutoCont
 router.delete("/produtos/:id", ProdutoController.deleteByIdValidation, ProdutoController.deleteById);
 router.get("/produtos/:id", ProdutoController.getByIdValidation, ProdutoController.getById);
 router.get("/produtos", ProdutoController.getAll);
+
+router.post("/Order", OrderController.createValidation, OrderController.create);
 
 export { router };
