@@ -14,10 +14,10 @@ export async function up(knex: Knex) {
                 .inTable(ETableNames.usuario) // faz referencia a tabela cidade campo "id"
                 .onUpdate("CASCADE") // caso o id da cidade seja mudado, muda aqui também
                 .onDelete("RESTRICT"); // não deixa que o registro usuario seja apagado
-            table.enum("status", ["received", "paid"]).index().notNullable().defaultTo("received");
             table.decimal("total_price", 10, 2).notNullable();
-            // table.string("paymentIntent_id");
             table.dateTime("created_at").notNullable();
+            // table.enum("status", ["received", "paid"]).index().notNullable().defaultTo("received");
+            // table.string("paymentIntent_id");
 
             table.comment("Tabela usada para armazenar Orders do sistema.");
         })
