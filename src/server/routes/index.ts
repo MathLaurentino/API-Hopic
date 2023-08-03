@@ -21,5 +21,6 @@ router.get("/produtos/:id", ProdutoController.getByIdValidation, ProdutoControll
 router.get("/produtos", ProdutoController.getAll);
 
 router.post("/Order", OrderController.createValidation, OrderController.create);
+router.get("/Order", OrderController.getAllValidation, OrderController.getAll);
 
 export { router };
