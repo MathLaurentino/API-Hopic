@@ -9,7 +9,7 @@ export const getAll = async (user_id: number, page: number, limit: number, id = 
     // const result = await Knex(ETableNames.order).select("*").where("user_id", user_id);
 
     const result = await Knex(ETableNames.order)
-        .select("*")
+        .select("id", "total_price", "created_at")
         .where("user_id", user_id)
         .andWhere("created_at", ">=", created_at)
         .andWhere("total_price", ">=", total_price)

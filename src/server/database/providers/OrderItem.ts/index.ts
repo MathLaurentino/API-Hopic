@@ -1,4 +1,5 @@
 import * as create from "./create";
+import * as getByOrderId from "./getByOrderId";
 // import * as getAll from "./getAll";
 // import * as getById from "./getById";
 // import * as deleteById from "./deleteById";
@@ -7,6 +8,7 @@ import * as create from "./create";
 
 export const OrderItemProvider = {
     ...create,
+    ...getByOrderId,
     // ...getAll,
     // ...getById,
     // ...deleteById,
