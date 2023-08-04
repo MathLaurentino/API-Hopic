@@ -4,7 +4,9 @@ import {ETableNames} from "../../ETableNames";
 import { InternalServerError } from "../../../shared/services/ApiErrors";
 import { IOrder } from "../../models";
 
-export const getAll = async (user_id: number, page: number, limit: number, id = 0, created_at: Date, total_price: number): Promise<IOrder[]> => {
+interface IOrderBD extends Omit<IOrder, "user_id"> {}
+
+export const getAll = async (user_id: number, page: number, limit: number, id = 0, created_at: Date, total_price: number): Promise<IOrderBD[]> => {
   
     // const result = await Knex(ETableNames.order).select("*").where("user_id", user_id);
 
@@ -17,7 +19,7 @@ export const getAll = async (user_id: number, page: number, limit: number, id = 
         .limit(limit);
 
 
-    if (id > 0 && result.every(item => item.id !== id)) {
+    if (id > 0 && result.every(item => Number(item.id) !== id)) {
         const resultById = await Knex(ETableNames.order)
             .select("*")
             .where("id", id)

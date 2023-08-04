@@ -8,7 +8,7 @@ export const create = async (order: Omit<IOrder, "id">): Promise<number> => {
     const [result] = await Knex(ETableNames.order).insert(order).returning("id");
 
     if (typeof result === "object") {
-        return result.id;
+        return Number(result.id);
     } else  { // "number"
         return result;
     }
