@@ -1,14 +1,14 @@
 import * as nodemailer from "nodemailer";
-// import { InternalServerError } from "./ApiErrors";
+import "dotenv/config";
 
-export const sendMail = (nome: string, email: string, uniqueString: string) => {
+export const EmailConfirmation = (nome: string, email: string, uniqueString: string) => {
 
     const transport = nodemailer.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        port: 2525,
+        host: process.env.EMAIL_HOST,
+        port: Number(process.env.EMAIL_PORT),
         auth: {
-            user: "1ade9ad35bc3af",
-            pass: "dc538e047a7be6" //dc538e047a7be6
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
         }
     });
 

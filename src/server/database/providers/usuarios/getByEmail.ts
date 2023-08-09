@@ -13,7 +13,7 @@ export const getByEmail = async (email: string): Promise<IUsuario> => {
     if (typeof result === "object") {
         return result;
     } else {
-        throw new UnauthorizedError("email ou senha inválidos");
+        throw new UnauthorizedError("email inválidos");
     } 
 
 };

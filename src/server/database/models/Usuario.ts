@@ -4,5 +4,6 @@ export interface IUsuario{
     email: string,
     senha: string,
     isValid: boolean,
-    uniqueString: string | null,
+    uniqueStringEmail: string | null,
+    uniqueStringPassword: string | null,
 }

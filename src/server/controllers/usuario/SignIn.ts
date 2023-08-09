@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { IUsuario } from "../../database/models";
 import { validation } from "../../shared/middleware";
 import * as yup from "yup";
 import { UsuarioProvider } from "../../database/providers/usuarios";
@@ -9,9 +8,12 @@ import { InternalServerError, JWTService, PasswordCrypto, UnauthorizedError } fr
 
 /**
  * Propriedades da requisição do endpoint de signIn.
- * Contém as propriedades do corpo da requisição, exceto o id e o nome do usuário.
+ * Contém as propriedades do corpo da requisição
  */
-interface IBodyProps extends Omit<IUsuario, "nome" | "id" | "isValid" | "uniqueString"> {}
+interface IBodyProps {
+    email: string,
+    senha:string
+}
 
 
 /**

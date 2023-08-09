@@ -1,12 +1,15 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { IUsuario } from "../../database/models";
 import { validation } from "../../shared/middleware/Validation";
 import { UsuarioProvider } from "../../database/providers/usuarios";
 import * as yup from "yup";
-import { ApiError, randString, sendMail } from "../../shared/services";
+import { ApiError, RandString, SendEmail } from "../../shared/services";
 
-interface IBodyProps extends Omit<IUsuario, "id" | "isValid" | "uniqueString"> {}
+interface IBodyProps {
+    nome: string,
+    email: string,
+    senha:string
+}
 
 export const signUpValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({
@@ -25,12 +28,13 @@ export const signUp = async (req: Request<{}, {}, IBodyProps>, res: Response): P
         throw new ApiError("email já cadastrado", StatusCodes.CONFLICT);
     }
 
-    const uniqueString = randString(email);
+    const uniqueStringEmail = RandString(email);
+    const uniqueStringPassword = null;
     const isValid = false;
 
-    const newUser = await UsuarioProvider.create({nome, email, senha, isValid, uniqueString});
-    await sendMail(nome, email, uniqueString);
+    const newUserId = await UsuarioProvider.create({nome, email, senha, isValid, uniqueStringEmail, uniqueStringPassword});
+    await SendEmail.EmailConfirmation(nome, email, uniqueStringEmail);
 
-    return res.status(StatusCodes.CREATED).json(newUser); // devolve o id criado
+    return res.status(StatusCodes.CREATED).json(newUserId); 
       
 };
