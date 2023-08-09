@@ -12,6 +12,7 @@ router.post("/singup", UsuarioController.signUpValidation, UsuarioController.sig
 router.post("/singin", UsuarioController.signInValidation, UsuarioController.signIn);
 router.post("/passwordReset", UsuarioController.passwordResetValidation, UsuarioController.passwordResetRequest);
 router.post("/newPassword/:chave", UsuarioController.newPasswordValidation, UsuarioController.newPasswordRequest);
+router.post("/resendEmailConfirmation", UsuarioController.resendEmailConfirmationValidation, UsuarioController.resendEmailConfirmation);
 router.get("/validateEmail/:chave", UsuarioController.validateEmailValidation, UsuarioController.validateEmail);
 
 router.put("/produtos/:id", ensureAuthenticated, sanitizeInput, uploadImage.single("image"), ProdutoController.updateByIdValidation, ProdutoController.updateById);
