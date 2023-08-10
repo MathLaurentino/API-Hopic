@@ -23,6 +23,7 @@ router.get("/produtos", ensureAuthenticated, ProdutoController.getAll);
 
 router.post("/Order", ensureAuthenticated, OrderController.createValidation, OrderController.create);
 router.get("/Order", ensureAuthenticated, OrderController.getAllValidation, OrderController.getAll);
+router.get("/getCSV", ensureAuthenticated, OrderController.getCSVValidation, OrderController.getCSV);
 
 router.get("/OrderItem/:order_id", ensureAuthenticated, OrderItemController.getByOrderIdValidation, OrderItemController.getByOrderId);
 
