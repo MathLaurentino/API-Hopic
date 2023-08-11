@@ -1,0 +1,3 @@
+Order ID,Total Price,Created At,Order Items
+1,32,1691706479465,"[{""quantity"":3,""item_price_at_time"":3,""name"":""coca""},{""quantity"":4,""item_price_at_time"":5,""name"":""pipoca""},{""quantity"":1,""item_price_at_time"":3,""name"":""nescau""}]"
+2,9,1691706500983,"[{""quantity"":3,""item_price_at_time"":3,""name"":""coca""}]"
