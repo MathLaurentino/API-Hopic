@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-// import { StatusCodes } from "http-status-codes";
 import { OrderProvider } from "../../database/providers/Order";
 import { validation } from "../../shared/middleware";
 import { createObjectCsvWriter } from "csv-writer";
+import { CSVData } from "../../database/models";
+
 import * as yup from "yup";
 import * as path from "path";
 
@@ -11,6 +12,9 @@ interface IQueryProps {
     total_price?: number;
 }
 
+/**
+ * Validação para os parâmetros da consulta de geração de CSV.
+ */
 export const getCSVValidation = validation((getSchema) => ({
     query: getSchema<IQueryProps>(yup.object().shape({
         created_at: yup.date().optional(),
@@ -18,6 +22,10 @@ export const getCSVValidation = validation((getSchema) => ({
     })), 
 }));
 
+
+/**
+ * Função assíncrona para gerar e enviar um arquivo CSV de relatório de compras.
+ */
 export const getCSV = async (req: Request<{}, {}, {}, IQueryProps>, res: Response): Promise<void> => {
     const user_id = Number(req.headers.user_id);
 
@@ -27,10 +35,21 @@ export const getCSV = async (req: Request<{}, {}, {}, IQueryProps>, res: Respons
         req.query.total_price || 0
     );
 
-    const csvFilePath = path.join(__dirname, "relatorio_compras.csv");
+    const csvFilePath = await createCSVfile(data);
 
     res.setHeader("Content-Disposition", "attachment; filename=relatorio_compras.csv");
     res.setHeader("Content-Type", "text/csv");
+    
+    return res.sendFile(csvFilePath);
+};
+
+
+/**
+ * Cria um arquivo CSV a partir dos dados fornecidos.
+ */
+const createCSVfile = async (data: CSVData[]): Promise<string> => {
+
+    const csvFilePath = path.join(__dirname, "..", "..", "..", "..", "uploads", "files", "relatorio_compras.csv");
 
     const csvWriter = createObjectCsvWriter({
         path: csvFilePath,
@@ -54,5 +73,5 @@ export const getCSV = async (req: Request<{}, {}, {}, IQueryProps>, res: Respons
 
     await csvWriter.writeRecords(records);
 
-    return res.sendFile(csvFilePath);
+    return csvFilePath;
 };

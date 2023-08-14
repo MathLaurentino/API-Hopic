@@ -4,7 +4,7 @@ import * as path from "path";
 export const uploadImage = (multer({
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
-            const destinationPath = path.join(__dirname, "..", "..", "..", "..", "imgs");
+            const destinationPath = path.join(__dirname, "..", "..", "..", "..", "uploads", "imgs");
             cb(null, destinationPath);
         },
         filename: (req, file, cb) => {
