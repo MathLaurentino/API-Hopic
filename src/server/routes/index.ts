@@ -8,8 +8,8 @@ router.get("/", (req, res) => {
     return res.send("Loja ligado!");
 });
 
-router.post("/singup", UsuarioController.signUpValidation, UsuarioController.signUp);
-router.post("/singin", UsuarioController.signInValidation, UsuarioController.signIn);
+router.post("/signup", UsuarioController.signUpValidation, UsuarioController.signUp);
+router.post("/signin", UsuarioController.signInValidation, UsuarioController.signIn);
 router.post("/passwordReset", UsuarioController.passwordResetValidation, UsuarioController.passwordResetRequest);
 router.post("/newPassword/:chave", UsuarioController.newPasswordValidation, UsuarioController.newPasswordRequest);
 router.post("/resendEmailConfirmation", UsuarioController.resendEmailConfirmationValidation, UsuarioController.resendEmailConfirmation);
