@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev ./src/index.ts",
-    "postinstall": "tsc",
     "production": "node ./build/index.js",
+    "preproduction": "tsc",
     "knex:rollback-all": "knex --knexfile ./src/server/database/knex/Environment.ts migrate:rollback --all",
     "knex:rollback": "knex --knexfile ./src/server/database/knex/Environment.ts migrate:rollback",
     "knex:migrate": "knex --knexfile ./src/server/database/knex/Environment.ts migrate:latest",
