@@ -15,8 +15,8 @@ router.post("/newPassword/:chave", UsuarioController.newPasswordValidation, Usua
 router.post("/resendEmailConfirmation", UsuarioController.resendEmailConfirmationValidation, UsuarioController.resendEmailConfirmation);
 router.get("/validateEmail/:chave", UsuarioController.validateEmailValidation, UsuarioController.validateEmail);
 
-router.put("/produtos/:id", ensureAuthenticated, sanitizeInput, uploadImage.single("image"), ProdutoController.updateByIdValidation, ProdutoController.updateById);
-router.post("/produtos", ensureAuthenticated, sanitizeInput, uploadImage.single("image"), ProdutoController.createValidation, ProdutoController.create);
+router.put("/produtos/:id", ensureAuthenticated, uploadImage.single("image"), sanitizeInput, ProdutoController.updateByIdValidation, ProdutoController.updateById);
+router.post("/produtos", ensureAuthenticated, uploadImage.single("image"), sanitizeInput, ProdutoController.createValidation, ProdutoController.create);
 router.delete("/produtos/:id", ensureAuthenticated, ProdutoController.deleteByIdValidation, ProdutoController.deleteById);
 router.get("/produtos/:id", ensureAuthenticated, ProdutoController.getByIdValidation, ProdutoController.getById);
 router.get("/produtos", ensureAuthenticated, ProdutoController.getAll);
