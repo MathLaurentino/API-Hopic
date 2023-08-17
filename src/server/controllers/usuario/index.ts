@@ -3,7 +3,7 @@ import * as singIp from "./SignIn";
 import * as validateEmail from "./ValidateEmail";
 import * as passwordReset from "./PasswordReset";
 import * as newPassword from "./NewPassword";
-import * as resendEmailConfirmation from "./resendEmailConfirmation";
+import * as resendEmailConfirmation from "./ResendEmailConfirmation";
 
 export const UsuarioController = {
     ...singUp,

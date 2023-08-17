@@ -1,9 +1,9 @@
 import * as create from "./create";
 import * as getAll from "./getAll";
-import * as getCSV from "./getCSV";
+import * as getXLSX from "./getXLSX";
 
 export const OrderController = {
     ...create,
     ...getAll,
-    ...getCSV
+    ...getXLSX
 };

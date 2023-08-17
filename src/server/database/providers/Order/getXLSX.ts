@@ -2,25 +2,25 @@
 import { Knex } from "../../knex";
 import {ETableNames} from "../../ETableNames";
 import { InternalServerError } from "../../../shared/services/ApiErrors";
-import { CSVData, CSVOrderItemData, CSVOrderData } from "../../models";
+import { XLSXData, XLSXOrderItemData, XLSXOrderData } from "../../models";
 
 /**
- * Obtém os dados no formato CSV com base nos critérios fornecidos.
+ * Obtém os dados no formato XLSX com base nos critérios fornecidos.
  * @param user_id - ID do usuário associado aos pedidos.
  * @param created_at - Data de criação mínima dos pedidos.
  * @param total_price - Preço total mínimo dos pedidos.
- * @returns Uma Promise que resolve em um array de objetos CSVData.
+ * @returns Uma Promise que resolve em um array de objetos XLSXData.
  */
-export const getCSV = async (user_id: number, created_at: Date, total_price: number): Promise<CSVData[]> => {
+export const getXLSX = async (user_id: number, created_at: Date, total_price: number): Promise<XLSXData[]> => {
 
     const orderPromise = getOrder(user_id, created_at, total_price);
     const orderItemPromise = getOrderItem(user_id, created_at, total_price);
 
     const [orderData, orderItemData] = await Promise.all([orderPromise, orderItemPromise]);
 
-    const CSVData = combineData(orderData, orderItemData);
+    const XLSXData = combineData(orderData, orderItemData);
 
-    return CSVData;
+    return XLSXData;
 
 };
 
@@ -28,7 +28,7 @@ export const getCSV = async (user_id: number, created_at: Date, total_price: num
 /**
  * Obtém os dados do pedido baseados em critérios como user_id, data de criação e preço total.
  */
-const getOrder = async (user_id: number,created_at: Date, total_price: number): Promise<CSVOrderData[]> => {
+const getOrder = async (user_id: number,created_at: Date, total_price: number): Promise<XLSXOrderData[]> => {
     
     const result = await Knex(ETableNames.order)
         .select("o.id", "o.total_price", "o.created_at")
@@ -49,7 +49,7 @@ const getOrder = async (user_id: number,created_at: Date, total_price: number): 
 /**
  * Obtém os dados dos itens de pedido baseados em critérios como user_id, data de criação e preço total.
  */
-const getOrderItem = async (user_id: number, created_at: Date, total_price: number): Promise<CSVOrderItemData[]> => {
+const getOrderItem = async (user_id: number, created_at: Date, total_price: number): Promise<XLSXOrderItemData[]> => {
   
     const result = await Knex(ETableNames.order)
         .select("i.order_id", "i.quantity", "i.item_price_at_time","p.name")
@@ -72,10 +72,10 @@ const getOrderItem = async (user_id: number, created_at: Date, total_price: numb
 
 /**
  * Combina os dados de pedidos e itens de pedidos em uma estrutura de dados especifica que
- * fascilita o processo de criação do CSV posteriormente
+ * fascilita o processo de criação do XLSX posteriormente
  */
-function combineData(orders: CSVOrderData[], orderItems: CSVOrderItemData[]): CSVData[] {
-    const combinedData: CSVData[] = [];
+function combineData(orders: XLSXOrderData[], orderItems: XLSXOrderItemData[]): XLSXData[] {
+    const combinedData: XLSXData[] = [];
   
     orders.forEach(order => {
         const orderItemsForOrder = orderItems.filter(item => item.order_id === order.id);

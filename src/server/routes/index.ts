@@ -51,16 +51,16 @@ router.get(
 router.put(
   '/produtos/:id',
   ensureAuthenticated,
-  sanitizeInput,
   uploadImage.single('image'),
+  sanitizeInput,
   ProdutoController.updateByIdValidation,
   ProdutoController.updateById
 )
 router.post(
   '/produtos',
   ensureAuthenticated,
-  sanitizeInput,
   uploadImage.single('image'),
+  sanitizeInput,
   ProdutoController.createValidation,
   ProdutoController.create
 )
@@ -91,10 +91,10 @@ router.get(
   OrderController.getAll
 )
 router.get(
-  '/getCSV',
+  '/getXLSX',
   ensureAuthenticated,
-  OrderController.getCSVValidation,
-  OrderController.getCSV
+  OrderController.getXLSXValidation,
+  OrderController.getXLSX
 )
 
 router.get(
