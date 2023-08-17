@@ -1,21 +1,21 @@
-interface CSVOrderItemData {
+interface XLSXOrderItemData {
     order_id: number
     quantity: number;
     item_price_at_time: number;
     name: string;
 }
   
-interface CSVOrderData {
+interface XLSXOrderData {
     id: number;
     total_price: number;
     created_at: string; // Pode ser um objeto Date ou uma string formatada
 }
 
-interface CSVData {
+interface XLSXData {
     order_id: number;
     total_price: number;
     created_at: string;
-    order_items: Omit<CSVOrderItemData, "order_id">[];
+    order_items: Omit<XLSXOrderItemData, "order_id">[];
 }
 
-export {CSVOrderItemData, CSVOrderData, CSVData};
+export {XLSXOrderItemData, XLSXOrderData, XLSXData};
