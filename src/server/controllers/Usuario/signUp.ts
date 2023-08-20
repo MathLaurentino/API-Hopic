@@ -6,9 +6,9 @@ import * as yup from "yup";
 import { ApiError, RandString, SendEmail } from "../../shared/services";
 
 interface IBodyProps {
-    nome: string,
-    email: string,
-    senha:string
+    nome: string;
+    email: string;
+    senha:string;
 }
 
 export const signUpValidation = validation((getSchema) => ({

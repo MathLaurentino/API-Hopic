@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 import * as yup from "yup";
 
 interface IParamsProps {
-    chave?: string,
+    chave?: string;
 }
 
 export const validateEmailValidation = validation((getSchema) => ({

@@ -7,7 +7,7 @@ import { Request, Response } from "express";
 import * as yup from "yup";
 
 interface IParamsProps {
-    order_id?: number,
+    order_id?: number;
 }
 
 export const getByOrderIdValidation = validation((getSchema) => ({

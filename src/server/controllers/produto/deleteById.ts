@@ -7,7 +7,7 @@ import { ProdutoProvider } from "../../database/providers/produtos";
 import { BadRequestError, UnauthorizedError } from "../../shared/services/ApiErrors";
 
 interface IParamsProps {
-    id?: number,
+    id?: number;
 }
 
 export const deleteByIdValidation = validation((getSchema) => ({

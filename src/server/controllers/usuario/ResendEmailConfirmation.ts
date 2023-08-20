@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { BadRequestError, SendEmail} from "../../shared/services";
 
 interface IBodyProps {
-    email: string,
+    email: string;
 }
 
 export const resendEmailConfirmationValidation = validation((getSchema) => ({

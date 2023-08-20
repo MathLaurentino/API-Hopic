@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 import * as yup from "yup";
 
 interface IBodyProps {
-    email: string,
+    email: string;
 }
 
 /**

@@ -11,8 +11,8 @@ import { InternalServerError, JWTService, PasswordCrypto, UnauthorizedError } fr
  * Contém as propriedades do corpo da requisição
  */
 interface IBodyProps {
-    email: string,
-    senha:string
+    email: string;
+    senha:string;
 }
 
 

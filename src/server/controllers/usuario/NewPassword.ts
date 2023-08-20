@@ -6,12 +6,12 @@ import { Request, Response } from "express";
 import * as yup from "yup";
 
 interface IParamProps {
-    chave?: string,
+    chave?: string;
 }
 
 interface IBodyProps {
-    email: string,
-    senha: string
+    email: string;
+    senha: string;
 }
 
 /**
