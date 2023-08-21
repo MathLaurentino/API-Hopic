@@ -1,4 +1,4 @@
-import { UsuarioProvider } from "../../database/providers/usuarios";
+import { UserProvider } from "../../database/providers/User";
 import { UnauthorizedError, RandString, SendEmail } from "../../shared/services";
 import { validation } from "../../shared/middleware";
 import { StatusCodes } from "http-status-codes";
@@ -19,13 +19,13 @@ export const passwordResetValidation = validation((getSchema) => ({
 }));
 
 /**
- * Envia o email com a chave de altorização para nova senha
+ * Envia o email com a chave de altorização para nova password
  */
 export const passwordResetRequest = async (req: Request<{}, {}, IBodyProps>, res: Response): Promise<Response> => {
 
     const email = req.body.email;
 
-    const user_data = await UsuarioProvider.getByEmail(email);
+    const user_data = await UserProvider.getByEmail(email);
 
     if (!user_data.isValid) {
         throw new UnauthorizedError("Email não confirmado");
@@ -33,9 +33,9 @@ export const passwordResetRequest = async (req: Request<{}, {}, IBodyProps>, res
 
     user_data.uniqueStringPassword = RandString(email);
 
-    SendEmail.EmailNewPassWord(user_data.nome, user_data.email, user_data.uniqueStringPassword);
+    SendEmail.EmailNewPassWord(user_data.name, user_data.email, user_data.uniqueStringPassword);
 
-    await UsuarioProvider.updateById(user_data.id, user_data);
+    await UserProvider.updateById(user_data.id, user_data);
 
     return res.status(StatusCodes.OK).send();
  

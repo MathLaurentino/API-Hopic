@@ -1,11 +1,11 @@
 import { UnauthorizedError } from "../../../shared/services";
 import { ETableNames } from "../../ETableNames";
 import { Knex } from "../../knex";
-import { IUsuario } from "../../models";
+import { IUser } from "../../models";
 
-export const getByEmail = async (email: string): Promise<IUsuario> => {
+export const getByEmail = async (email: string): Promise<IUser> => {
 
-    const result = await Knex(ETableNames.usuario)
+    const result = await Knex(ETableNames.user)
         .select("*")
         .where("email", email)
         .first();

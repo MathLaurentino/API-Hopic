@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { validation } from "../../shared/middleware/Validation";
-import { UsuarioProvider } from "../../database/providers/usuarios";
+import { UserProvider } from "../../database/providers/User";
 import * as yup from "yup";
 import { BadRequestError, SendEmail} from "../../shared/services";
 
@@ -19,13 +19,13 @@ export const resendEmailConfirmation = async (req: Request<{}, {}, IBodyProps>, 
 
     const {email} = req.body;
     
-    const user_data = await UsuarioProvider.getByEmail(email);
+    const user_data = await UserProvider.getByEmail(email);
 
     if (user_data.isValid || user_data.uniqueStringEmail == null) {
         throw new BadRequestError("O endereço de e-mail associado a esta conta já foi confirmado.");
     }
 
-    SendEmail.EmailConfirmation(user_data.nome, user_data.email, user_data.uniqueStringEmail);
+    SendEmail.EmailConfirmation(user_data.name, user_data.email, user_data.uniqueStringEmail);
 
     return res.status(StatusCodes.OK).send(); 
       

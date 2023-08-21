@@ -1,39 +1,40 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { validation } from "../../shared/middleware/Validation";
-import { UsuarioProvider } from "../../database/providers/usuarios";
+import { UserProvider } from "../../database/providers/User";
+import { ApiError, PasswordCrypto, RandString, SendEmail } from "../../shared/services";
 import * as yup from "yup";
-import { ApiError, RandString, SendEmail } from "../../shared/services";
 
 interface IBodyProps {
-    nome: string;
+    name: string;
     email: string;
-    senha:string;
+    password:string;
 }
 
 export const signUpValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({
-        nome: yup.string().required().min(2),
+        name: yup.string().required().min(2),
         email: yup.string().required().min(5),
-        senha: yup.string().required().min(6),
+        password: yup.string().required().min(6),
     })),
 })); 
 
 export const signUp = async (req: Request<{}, {}, IBodyProps>, res: Response): Promise<Response> => {
 
-    const {email, nome, senha} = req.body;
-    const is_new_email = await UsuarioProvider.is_new_email(email);
+    const {email, name, password} = req.body;
+    const is_new_email = await UserProvider.is_new_email(email);
 
     if (!is_new_email) { // se o email já é cadastrado
         throw new ApiError("email já cadastrado", StatusCodes.CONFLICT);
     }
 
+    const hashedPassword = await PasswordCrypto.hashPassword(password);
     const uniqueStringEmail = RandString(email);
     const uniqueStringPassword = null;
     const isValid = false;
 
-    const newUserId = await UsuarioProvider.create({nome, email, senha, isValid, uniqueStringEmail, uniqueStringPassword});
-    await SendEmail.EmailConfirmation(nome, email, uniqueStringEmail);
+    const newUserId = await UserProvider.create({name, email, password: hashedPassword, isValid, uniqueStringEmail, uniqueStringPassword});
+    await SendEmail.EmailConfirmation(name, email, uniqueStringEmail);
 
     return res.status(StatusCodes.CREATED).json(newUserId); 
       

@@ -11,9 +11,9 @@ export async function up(knex: Knex) {
                 .index()
                 .notNullable()
                 .references("id")
-                .inTable(ETableNames.usuario) // faz referencia a tabela cidade campo "id"
+                .inTable(ETableNames.user) // faz referencia a tabela cidade campo "id"
                 .onUpdate("CASCADE") // caso o id da cidade seja mudado, muda aqui também
-                .onDelete("RESTRICT"); // não deixa que o registro usuario seja apagado
+                .onDelete("RESTRICT"); // não deixa que o registro user seja apagado
             table.string("name").index().notNullable().checkLength(">=", 1);
             table.decimal("price", 10, 2).index().notNullable();
             table.string("imageAddress").index().nullable();

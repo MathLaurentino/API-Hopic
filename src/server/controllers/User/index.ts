@@ -5,7 +5,7 @@ import * as passwordReset from "./passwordReset";
 import * as newPassword from "./newPassword";
 import * as resendEmailConfirmation from "./resendEmailConfirmation";
 
-export const UsuarioController = {
+export const UserController = {
     ...signUp,
     ...signIp,
     ...validateEmail,

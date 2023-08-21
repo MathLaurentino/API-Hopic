@@ -1,4 +1,4 @@
-import { UsuarioProvider } from "../../database/providers/usuarios";
+import { UserProvider } from "../../database/providers/User";
 import { BadRequestError } from "../../shared/services";
 import { validation } from "../../shared/middleware";
 import { StatusCodes } from "http-status-codes";
@@ -23,7 +23,7 @@ export const validateEmail = async (req: Request<IParamsProps>, res: Response): 
         throw new BadRequestError("Parâmetro 'id' precisa ser informado");
     }
 
-    await UsuarioProvider.validateEmail(chave);
+    await UserProvider.validateEmail(chave);
 
     return res.status(StatusCodes.OK).send();
  

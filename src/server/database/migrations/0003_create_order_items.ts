@@ -13,14 +13,14 @@ export async function up(knex: Knex) {
                 .references("id")
                 .inTable(ETableNames.produto) // faz referencia a tabela cidade campo "id"
                 .onUpdate("CASCADE") // caso o id da cidade seja mudado, muda aqui também
-                .onDelete("RESTRICT"); // não deixa que o registro usuario seja apagado
+                .onDelete("RESTRICT"); // não deixa que o registro user seja apagado
             table.bigInteger("order_id")
                 .index()
                 .notNullable()
                 .references("id")
                 .inTable(ETableNames.order) // faz referencia a tabela cidade campo "id"
                 .onUpdate("CASCADE") // caso o id da cidade seja mudado, muda aqui também
-                .onDelete("RESTRICT"); // não deixa que o registro usuario seja apagado
+                .onDelete("RESTRICT"); // não deixa que o registro user seja apagado
             table.integer("quantity").notNullable();           
             table.decimal("item_price_at_time", 10, 2).notNullable();
 

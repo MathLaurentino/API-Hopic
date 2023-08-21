@@ -4,7 +4,7 @@ import * as getByEmail from "./getByEmail";
 import * as validateEmail from "./validateEmail";
 import * as updateById from "./updateById";
 
-export const UsuarioProvider = {
+export const UserProvider = {
     ...create,
     ...is_new_email,
     ...getByEmail,

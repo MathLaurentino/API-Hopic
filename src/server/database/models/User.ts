@@ -1,8 +1,8 @@
-export interface IUsuario{
+export interface IUser{
     id: number;
-    nome: string;
+    name: string;
     email: string;
-    senha: string;
+    password: string;
     isValid: boolean;
     uniqueStringEmail: string | null;
     uniqueStringPassword: string | null;
