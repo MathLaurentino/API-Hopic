@@ -1,7 +1,5 @@
 import { Router } from "express";
 import { OrderController, OrderItemController, ProdutoController, UsuarioController} from "./../controllers";
-// import { UsuarioController } from "../controllers/Usuario";
-// import { ProdutoController } from "../controllers/Produto";
 import { uploadImage, sanitizeInput, ensureAuthenticated } from "../shared/middleware"; // 
 
 const router = Router();
