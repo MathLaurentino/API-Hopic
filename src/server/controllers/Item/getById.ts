@@ -2,7 +2,7 @@ import * as yup from "yup";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { validation } from "../../shared/middleware/Validation";
-import { ProdutoProvider } from "../../database/providers/produtos";
+import { ItemProvider } from "../../database/providers/Item";
 import { BadRequestError, UnauthorizedError } from "../../shared/services/ApiErrors";
 
 interface IParamsProps {
@@ -24,10 +24,10 @@ export const getById = async (req: Request<IParamsProps>, res: Response): Promis
         throw new BadRequestError("Parâmetro id necessário"); 
     }
 
-    const isClientAuthorized = await ProdutoProvider.validateClientAccess(predutoId, userId);
+    const isClientAuthorized = await ItemProvider.validateClientAccess(predutoId, userId);
 
     if (isClientAuthorized) {
-        const result = await ProdutoProvider.getbyId(predutoId);
+        const result = await ItemProvider.getbyId(predutoId);
         return res.status(StatusCodes.OK).json(result);
     } 
         

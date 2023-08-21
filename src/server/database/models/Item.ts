@@ -1,4 +1,4 @@
-export interface IProduto{
+export interface IItem{
     id: number;
     user_id: number;
     name: string;

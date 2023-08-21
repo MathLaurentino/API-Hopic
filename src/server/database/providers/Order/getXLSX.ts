@@ -55,7 +55,7 @@ const getOrderItem = async (user_id: number, created_at: Date, total_price: numb
         .select("i.order_id", "i.quantity", "i.item_price_at_time","p.name")
         .from(ETableNames.order + " as o")
         .innerJoin(ETableNames.orderItem + " as i", "o.id", "i.order_id")
-        .innerJoin(ETableNames.produto + " as p", "p.id", "i.produto_id")
+        .innerJoin(ETableNames.item  + " as p", "p.id", "i.item_id")
         .where("o.user_id", user_id)
         .andWhere("o.created_at", ">=", created_at)
         .andWhere("o.total_price", ">=", total_price);

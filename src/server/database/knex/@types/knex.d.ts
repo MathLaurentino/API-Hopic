@@ -1,4 +1,4 @@
-import { IUser, IProduto, IOrder, IOrderItem } from "../../models"; 
+import { IUser, IItem, IOrder, IOrderItem } from "../../models"; 
 
 /**
  * Define a tipagem para o Knex
@@ -6,7 +6,7 @@ import { IUser, IProduto, IOrder, IOrderItem } from "../../models";
 declare module "knex/types/tables" {
   interface Tables {
     user: IUser,
-    produto: IProduto,
+    item: IItem,
     order: IOrder,
     orderItem: IOrderItem,
   }

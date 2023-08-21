@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, UnauthorizedError } from "../../shared/services";
-import { ProdutoProvider } from "../../database/providers/produtos";
+import { ItemProvider } from "../../database/providers/Item";
 import { OrderProvider } from "../../database/providers/Order";
 import { IOrderItem } from "../../database/models";
 import { OrderItemProvider } from "../../database/providers/OrderItem.ts";
 
 interface IBodyProps {
-    produto_id: number;
+    item_id: number;
     quantity: number;
 }
 
@@ -27,18 +27,18 @@ export const create = async (req: Request<{}, {}, IBodyProps[]>, res: Response):
     let total_price: number = 0; // para o Order
 
     let x: number = 0;
-    // Loop através dos produtos fornecidos na requisição
+    // Loop através dos items fornecidos na requisição
     for (const productInput of inputData) {
 
-        const produto_id = productInput.produto_id;
+        const item_id = productInput.item_id;
         const quantity = productInput.quantity;
 
-        // Obtenção dos detalhes do produto do banco de dados através do ProdutoProvider
-        const productDB = await ProdutoProvider.getbyId(produto_id);
+        // Obtenção dos detalhes do item do banco de dados através do ItemProvider
+        const productDB = await ItemProvider.getbyId(item_id);
 
-        // Verificação se o produto pertence ao usuário atual
+        // Verificação se o item pertence ao usuário atual
         if (productDB.user_id !== user_id) {
-            throw new UnauthorizedError("Produto_id: " + produto_id + " inválido para esse usuário");
+            throw new UnauthorizedError("item_id: " + item_id + " inválido para esse usuário");
         }
 
         const item_price_at_time = productDB.price;
@@ -47,7 +47,7 @@ export const create = async (req: Request<{}, {}, IBodyProps[]>, res: Response):
         total_price += item_price_at_time * quantity;
 
         // Adição do item ao array de itens do pedido
-        orderItemArray[x] = { produto_id, quantity, item_price_at_time };
+        orderItemArray[x] = { item_id, quantity, item_price_at_time };
 
         x++;
     }
@@ -78,15 +78,17 @@ export const createValidation = (req: Request<{}, {}, IBodyProps[]>, res: Respon
         throw new BadRequestError("The input must be an array of objects.");
     }
   
+    let bodyErrors: { [key: string]: string } = {};
+
     for (const product of inputData) {
 
-        const bodyErrors: { [key: string]: string } = {};
+        bodyErrors = {};
 
-        if (!product.produto_id) {
-            bodyErrors["produto_id"] = "produto_id is a required field";
+        if (!product.item_id) {
+            bodyErrors["item_id"] = "item_id is a required field";
         } 
-        else if (typeof product.produto_id !== "number") {
-            bodyErrors["produto_id"] = "produto_id must be a 'number' type";
+        else if (typeof product.item_id !== "number") {
+            bodyErrors["item_id"] = "item_id must be a 'number' type";
         }
 
         if (!product.quantity) {
@@ -99,18 +101,18 @@ export const createValidation = (req: Request<{}, {}, IBodyProps[]>, res: Respon
             bodyErrors["quantity"] = "quantity must be greater than 0";
         }
 
-        if ( typeof bodyErrors.produto_id !== "undefined" || typeof bodyErrors.quantity !== "undefined") {
-            res.status(StatusCodes.BAD_REQUEST).json({
-                "errors":{
-                    "body":{
-                        ...bodyErrors
-                    }
-                }
-            });
-        }
+    }
 
-        break;
+    if ( typeof bodyErrors.item_id !== "undefined" || typeof bodyErrors.quantity !== "undefined") {
+        res.status(StatusCodes.BAD_REQUEST).json({
+            "errors":{
+                "body":{
+                    ...bodyErrors
+                }
+            }
+        });
+    } else {
+        next();
     }
   
-    next();
 };

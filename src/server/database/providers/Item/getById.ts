@@ -1,11 +1,11 @@
 import { Knex } from "../../knex";
 import {ETableNames} from "../../ETableNames";
 import { NotFoundError } from "../../../shared/services/ApiErrors";
-import { IProduto } from "../../models";
+import { IItem } from "../../models";
 
-export const getbyId = async (id: number): Promise<IProduto> => {
+export const getbyId = async (id: number): Promise<IItem> => {
    
-    const [result] = await Knex(ETableNames.produto).select("*").where("id", id);
+    const [result] = await Knex(ETableNames.item).select("*").where("id", id);
 
     if (typeof result === "object") {
         return result;

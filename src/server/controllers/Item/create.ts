@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { IProduto } from "../../database/models";
+import { IItem } from "../../database/models";
 import { validation } from "../../shared/middleware/Validation";
-import { ProdutoProvider } from "../../database/providers/produtos";
+import { ItemProvider } from "../../database/providers/Item";
 import * as yup from "yup";
 
-interface IBodyProps extends Omit<IProduto, "id" | "user_id" | "imageAddress"> {}
+interface IBodyProps extends Omit<IItem, "id" | "user_id" | "imageAddress"> {}
 
 export const createValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({
@@ -24,7 +24,7 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response): P
         imageAddress = req.file.filename;
     }
 
-    const result = await ProdutoProvider.create({
+    const result = await ItemProvider.create({
         name: name, 
         price: price,
         user_id: user_id,

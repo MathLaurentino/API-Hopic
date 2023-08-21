@@ -1,6 +1,6 @@
 //export
 export * from "./Order";
 export * from "./OrderItem";
-export * from "./Produto";
+export * from "./Item";
 export * from "./User";
 

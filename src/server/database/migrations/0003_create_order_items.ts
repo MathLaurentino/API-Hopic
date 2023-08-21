@@ -7,11 +7,11 @@ export async function up(knex: Knex) {
         .schema
         .createTable(ETableNames.orderItem, table => {
             table.bigIncrements("id").primary().index();
-            table.bigInteger("produto_id")
+            table.bigInteger("item_id")
                 .index()
                 .notNullable()
                 .references("id")
-                .inTable(ETableNames.produto) // faz referencia a tabela cidade campo "id"
+                .inTable(ETableNames.item) // faz referencia a tabela cidade campo "id"
                 .onUpdate("CASCADE") // caso o id da cidade seja mudado, muda aqui também
                 .onDelete("RESTRICT"); // não deixa que o registro user seja apagado
             table.bigInteger("order_id")

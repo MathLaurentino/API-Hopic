@@ -5,7 +5,7 @@ export async function up(knex: Knex) {
 
     return knex
         .schema
-        .createTable(ETableNames.produto, table => {
+        .createTable(ETableNames.item, table => {
             table.bigIncrements("id").primary().index();
             table.bigInteger("user_id")
                 .index()
@@ -18,18 +18,18 @@ export async function up(knex: Knex) {
             table.decimal("price", 10, 2).index().notNullable();
             table.string("imageAddress").index().nullable();
 
-            table.comment("Tabela usada para armazenar Produtos no sistema.");
+            table.comment("Tabela usada para armazenar os items no sistema.");
         })
         .then(() => {
-            console.log(`# Created table ${ETableNames.produto}`);
+            console.log(`# Created table ${ETableNames.item}`);
         });
 }
 
 export async function down(knex: Knex) {
     return knex
         .schema
-        .dropTable(ETableNames.produto)
+        .dropTable(ETableNames.item)
         .then(() => {
-            console.log(`# Dropped table ${ETableNames.produto}`); 
+            console.log(`# Dropped table ${ETableNames.item}`); 
         });
 }

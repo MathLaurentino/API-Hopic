@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { OrderController, OrderItemController, ProdutoController, UserController} from "./../controllers";
+import { OrderController, OrderItemController, ItemController, UserController} from "./../controllers";
 import { uploadImage, ensureAuthenticated } from "../shared/middleware"; // 
 
 const router = Router();
@@ -15,11 +15,11 @@ router.post("/newPassword/:chave", UserController.newPasswordValidation, UserCon
 router.post("/resendEmailConfirmation", UserController.resendEmailConfirmationValidation, UserController.resendEmailConfirmation);
 router.get("/validateEmail/:chave", UserController.validateEmailValidation, UserController.validateEmail);
 
-router.put("/produtos/:id", ensureAuthenticated, uploadImage.single("image"), ProdutoController.updateByIdValidation, ProdutoController.updateById);
-router.post("/produtos", ensureAuthenticated, uploadImage.single("image"), ProdutoController.createValidation, ProdutoController.create);
-router.delete("/produtos/:id", ensureAuthenticated, ProdutoController.deleteByIdValidation, ProdutoController.deleteById);
-router.get("/produtos/:id", ensureAuthenticated, ProdutoController.getByIdValidation, ProdutoController.getById);
-router.get("/produtos", ensureAuthenticated, ProdutoController.getAll);
+router.put("/produtos/:id", ensureAuthenticated, uploadImage.single("image"), ItemController.updateByIdValidation, ItemController.updateById);
+router.post("/produtos", ensureAuthenticated, uploadImage.single("image"), ItemController.createValidation, ItemController.create);
+router.delete("/produtos/:id", ensureAuthenticated, ItemController.deleteByIdValidation, ItemController.deleteById);
+router.get("/produtos/:id", ensureAuthenticated, ItemController.getByIdValidation, ItemController.getById);
+router.get("/produtos", ensureAuthenticated, ItemController.getAll);
 
 router.post("/Order", ensureAuthenticated, OrderController.createValidation, OrderController.create);
 router.get("/Order", ensureAuthenticated, OrderController.getAllValidation, OrderController.getAll);

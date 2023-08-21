@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { validation } from "../../shared/middleware/Validation";
 import { removeImageFromFileSystem } from "../../shared/services";
-import { ProdutoProvider } from "../../database/providers/produtos";
+import { ItemProvider } from "../../database/providers/Item";
 import { BadRequestError, UnauthorizedError } from "../../shared/services/ApiErrors";
 
 interface IParamsProps {
@@ -25,17 +25,17 @@ export const deleteById = async (req: Request<IParamsProps>, res: Response): Pro
         throw new BadRequestError("Parâmetro 'id' precisa ser informado");
     }
 
-    const isClientAuthorized = await  ProdutoProvider.validateClientAccess(produtoId, userId);
+    const isClientAuthorized = await  ItemProvider.validateClientAccess(produtoId, userId);
 
     if (isClientAuthorized) {
-        const userProduto = await ProdutoProvider.getbyId(produtoId);
+        const userProduto = await ItemProvider.getbyId(produtoId);
 
         // se o produto tem uma img no sistema, ele é apagado
         if (userProduto.imageAddress) { 
             removeImageFromFileSystem(userProduto.imageAddress);
         }
 
-        await ProdutoProvider.deleteById(produtoId);
+        await ItemProvider.deleteById(produtoId);
         return res.status(StatusCodes.OK).send();
     }
 

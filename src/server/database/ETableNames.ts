@@ -1,6 +1,6 @@
 export enum ETableNames {
     user = "user",
-    produto = "produto",
+    item = "item",
     order = "order",
     orderItem = "orderItem",
 }

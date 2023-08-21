@@ -1,11 +1,11 @@
 import { NotFoundError } from "../../../shared/services/ApiErrors";
 import { ETableNames } from "../../ETableNames";
 import { Knex } from "../../knex";
-import { IProduto } from "../../models";
+import { IItem } from "../../models";
 
-export const updateById = async (produtoId: number, produtoBody: Omit<IProduto, "id" | "user_id">): Promise<void> => {
+export const updateById = async (itemId: number, itemData: Omit<IItem, "id" | "user_id">): Promise<void> => {
 
-    const result = await Knex(ETableNames.produto).where("id", produtoId).update(produtoBody);
+    const result = await Knex(ETableNames.item).where("id", itemId).update(itemData);
 
     // se foi alterado
     if (result > 0) {
