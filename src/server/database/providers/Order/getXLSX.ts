@@ -51,11 +51,10 @@ const getOrder = async (user_id: number,created_at: Date, total_price: number): 
  */
 const getOrderItem = async (user_id: number, created_at: Date, total_price: number): Promise<XLSXOrderItemData[]> => {
   
-    const result = await Knex(ETableNames.order)
-        .select("i.order_id", "i.quantity", "i.item_price_at_time","p.name")
+    const result: XLSXOrderItemData[] = await Knex.queryBuilder()
+        .select("oi.order_id", "oi.quantity", "oi.item_price_at_time","oi.item_name")
         .from(ETableNames.order + " as o")
-        .innerJoin(ETableNames.orderItem + " as i", "o.id", "i.order_id")
-        .innerJoin(ETableNames.item  + " as p", "p.id", "i.item_id")
+        .innerJoin(ETableNames.orderItem + " as oi", "o.id", "oi.order_id")
         .where("o.user_id", user_id)
         .andWhere("o.created_at", ">=", created_at)
         .andWhere("o.total_price", ">=", total_price);
@@ -87,7 +86,7 @@ function combineData(orders: XLSXOrderData[], orderItems: XLSXOrderItemData[]): 
             order_items: orderItemsForOrder.map(item => ({
                 quantity: item.quantity,
                 item_price_at_time: item.item_price_at_time,
-                name: item.name,
+                item_name: item.item_name,
             })),
         });
     });

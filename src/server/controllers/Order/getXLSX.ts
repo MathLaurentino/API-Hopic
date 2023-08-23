@@ -98,7 +98,7 @@ const createDataForExcel = (data: XLSXData[]): (string | number)[][] => {
         const time = dateTime.getHours() + ":" + dateTime.getMinutes();
 
         element.order_items.forEach(item => {
-            const row = [element.order_id, item.name, date, time, item.quantity, item.item_price_at_time, item.quantity * item.item_price_at_time, element.total_price];
+            const row = [element.order_id, item.item_name, date, time, item.quantity, item.item_price_at_time, item.quantity * item.item_price_at_time, element.total_price];
             dataExcel.push(row);
         });
     });

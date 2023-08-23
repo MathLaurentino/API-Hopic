@@ -10,15 +10,12 @@ const startServer = () => {
 
 
 /**
- * Se estiver rodando localmente, inicializa as migrates e seed 
+ * Se estiver rodando localmente, inicializa as migrates
  *  antes de inicializar o servidor com o startServer()
  */
 if (process.env.IS_LOCALHOST !== "true") {
     Knex.migrate.latest()
         .then(() => {
-            // Knex.seed.run()
-            //     .then(() => startServer())
-            //     .catch(console.log);
             startServer();
         })
         .catch(console.log); 

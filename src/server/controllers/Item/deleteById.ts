@@ -30,12 +30,13 @@ export const deleteById = async (req: Request<IParamsProps>, res: Response): Pro
     if (isClientAuthorized) {
         const userProduto = await ItemProvider.getbyId(produtoId);
 
+        await ItemProvider.deleteById(produtoId);
+
         // se o produto tem uma img no sistema, ele é apagado
         if (userProduto.imageAddress) { 
             removeImageFromFileSystem(userProduto.imageAddress);
         }
-
-        await ItemProvider.deleteById(produtoId);
+        
         return res.status(StatusCodes.OK).send();
     }
 
