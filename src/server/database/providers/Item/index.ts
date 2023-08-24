@@ -4,6 +4,7 @@ import * as getById from "./getById";
 import * as deleteById from "./deleteById";
 import * as updateById from "./updateById";
 import * as validateClientAccess from "./validateClientAccess";
+import * as validateImgClientAccess from "./validateImgClientAccess";
 
 export const ItemProvider = {
     ...create,
@@ -12,4 +13,5 @@ export const ItemProvider = {
     ...deleteById,
     ...updateById,
     ...validateClientAccess,
+    ...validateImgClientAccess,
 };

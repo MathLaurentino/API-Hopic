@@ -5,6 +5,8 @@ import path from "path";
 export const removeImageFromFileSystem = (imageAddress: string): void => {
 
     const imagePath = path.join(__dirname, "..", "..", "..", "..", "uploads", "imgs", imageAddress);
-    fs.unlinkSync(imagePath); 
+    if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath); 
+    }
 
 };
