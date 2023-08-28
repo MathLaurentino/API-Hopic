@@ -1,10 +1,11 @@
 import { Knex } from "./server/database/knex";
 import { server } from "./server/Server";
+import logger from "./server/shared/services/logger";
 
 
 const startServer = () => {
     server.listen(process.env.PORT || 3333, () => {
-        console.log("App rodando na porta " + process.env.PORT || 3333);
+        logger.info(`Server is running on port ${process.env.PORT || 3333}`);
     });
 };
 
