@@ -28,7 +28,7 @@ export class UnauthorizedError extends ApiError {
 }
 
 export class InternalServerError extends ApiError {
-    constructor(){
-        super("Internal Server Error", 500);
+    constructor(message?: string){
+        super(message || "Internal Server Error", 500);
     }
 }

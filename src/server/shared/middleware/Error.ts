@@ -7,9 +7,9 @@ export const errorMiddleware = (error: Error & Partial<ApiError>, req: Request, 
     if (req.file) {
         removeImageFromFileSystem(req.file.filename);
     }
-    
+
     const statusCode = error.statusCode ?? 500;
-    const message = error.statusCode ? error.message : "Internal Server Error";
+    const message = statusCode == 500 ? "Internal Server Error" : error.message;
 
     if (statusCode === 500) {
         logger.error(error.message);

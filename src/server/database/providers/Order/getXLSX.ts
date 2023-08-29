@@ -1,8 +1,8 @@
-
 import { Knex } from "../../knex";
 import {ETableNames} from "../../ETableNames";
-import { InternalServerError } from "../../../shared/services/ApiErrors";
+import { ApiError, InternalServerError } from "../../../shared/services/ApiErrors";
 import { XLSXData, XLSXOrderItemData, XLSXOrderData } from "../../models";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Obtém os dados no formato XLSX com base nos critérios fornecidos.
@@ -12,16 +12,13 @@ import { XLSXData, XLSXOrderItemData, XLSXOrderData } from "../../models";
  * @returns Uma Promise que resolve em um array de objetos XLSXData.
  */
 export const getXLSX = async (user_id: number, created_at: Date, total_price: number): Promise<XLSXData[]> => {
-
-    const orderPromise = getOrder(user_id, created_at, total_price);
-    const orderItemPromise = getOrderItem(user_id, created_at, total_price);
-
-    const [orderData, orderItemData] = await Promise.all([orderPromise, orderItemPromise]);
+    
+    const orderData = await getOrder(user_id, created_at, total_price);
+    const orderItemData = await getOrderItem(user_id, created_at, total_price);
 
     const XLSXData = combineData(orderData, orderItemData);
 
     return XLSXData;
-
 };
 
 
@@ -30,18 +27,18 @@ export const getXLSX = async (user_id: number, created_at: Date, total_price: nu
  */
 const getOrder = async (user_id: number,created_at: Date, total_price: number): Promise<XLSXOrderData[]> => {
     
-    const result = await Knex(ETableNames.order)
+    const result: XLSXOrderData[] = await Knex(ETableNames.order)
         .select("o.id", "o.total_price", "o.created_at")
         .from(ETableNames.order + " as o")
         .where("o.user_id", user_id)
         .andWhere("created_at", ">=", created_at)
         .andWhere("total_price", ">=", total_price);
-
+    
     if (result.length > 0) {
         return result;
     } 
-
-    throw new InternalServerError();
+        
+    throw new ApiError("Usuario ainda não possui ordens criadas", StatusCodes.NO_CONTENT);
 
 };
 
@@ -64,7 +61,7 @@ const getOrderItem = async (user_id: number, created_at: Date, total_price: numb
         return result;
     } 
 
-    throw new InternalServerError();
+    throw new InternalServerError("Usuario " + user_id + " tem uma(s) 'Order' sem 'OrderItem'");
 
 };
 
