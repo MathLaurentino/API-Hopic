@@ -36,29 +36,31 @@ export const signIn = async (req: Request<{},{}, IBodyProps>, res: Response): Pr
     const {email, password} = req.body;
 
     // busca o usuário pelo email
-    const user = await UserProvider.getByEmail(email);
+    const userData = await UserProvider.getByEmail(email);
 
     // verifica a correspondência da password
-    const passwordMatch = await PasswordCrypto.verifyPassword(password, user.password);
+    const passwordMatch = await PasswordCrypto.verifyPassword(password, userData.password);
 
     // caso a password não corresponda
     if (!passwordMatch) {
         throw new UnauthorizedError("Email ou password inválidos");
     } 
 
-    if (!user.isValid) {
+    if (!userData.isValid) {
         throw new UnauthorizedError("Email não autentificado");
     }
     
     // tenta gerar o token de acesso
-    const accessToken = JWTService.sign({uid: Number(user.id)});
+    const accessToken = JWTService.sign({uid: Number(userData.id)});
 
     // caso tenha dado erro ao gerar token de acesso
     if (accessToken === "JWT_SECRET_NOT_FOUND") {
         throw new InternalServerError();
     }
-
+    
+    const {name, id} = userData;
+    const user = { name, email, id };
     // se gerar o token com secesso, retorna o token de acesso
-    return res.status(StatusCodes.OK).json({ accessToken });
+    return res.status(StatusCodes.OK).json({user, accessToken});
     
 };
