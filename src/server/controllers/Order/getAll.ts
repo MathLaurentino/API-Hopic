@@ -9,7 +9,7 @@ interface IQueryProps {
     page?: number;
     limit?: number;
     id?: number;
-    created_at?: Date;
+    created_at?: number; //timestamp
     total_price?: number;
 }
 
@@ -18,7 +18,7 @@ export const getAllValidation = validation((getSchema) => ({
         page: yup.number().optional().moreThan(0),
         limit: yup.number().optional().moreThan(0),
         id: yup.number().integer().optional().default(0),
-        created_at: yup.date().optional(),
+        created_at: yup.number().optional(), //timestamp
         total_price: yup.number().optional().moreThan(0),
     })), 
 }));
@@ -41,7 +41,7 @@ export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Respons
         req.query.page || 1, 
         req.query.limit || 7, 
         Number(req.query.id || 0),
-        req.query.created_at ? new Date(req.query.created_at) : new Date(0), 
+        req.query.created_at || 0, 
         req.query.total_price || 0
     );
 

@@ -11,7 +11,7 @@ import { StatusCodes } from "http-status-codes";
  * @param total_price - Preço total mínimo dos pedidos.
  * @returns Uma Promise que resolve em um array de objetos XLSXData.
  */
-export const getXLSX = async (user_id: number, created_at: Date, total_price: number): Promise<XLSXData[]> => {
+export const getXLSX = async (user_id: number, created_at: number, total_price: number): Promise<XLSXData[]> => {
     
     const orderData = await getOrder(user_id, created_at, total_price);
     const orderItemData = await getOrderItem(user_id, created_at, total_price);
@@ -25,7 +25,7 @@ export const getXLSX = async (user_id: number, created_at: Date, total_price: nu
 /**
  * Obtém os dados do pedido baseados em critérios como user_id, data de criação e preço total.
  */
-const getOrder = async (user_id: number,created_at: Date, total_price: number): Promise<XLSXOrderData[]> => {
+const getOrder = async (user_id: number,created_at: number, total_price: number): Promise<XLSXOrderData[]> => {
     
     const result: XLSXOrderData[] = await Knex(ETableNames.order)
         .select("o.id", "o.total_price", "o.created_at")
@@ -46,7 +46,7 @@ const getOrder = async (user_id: number,created_at: Date, total_price: number): 
 /**
  * Obtém os dados dos itens de pedido baseados em critérios como user_id, data de criação e preço total.
  */
-const getOrderItem = async (user_id: number, created_at: Date, total_price: number): Promise<XLSXOrderItemData[]> => {
+const getOrderItem = async (user_id: number, created_at: number, total_price: number): Promise<XLSXOrderItemData[]> => {
   
     const result: XLSXOrderItemData[] = await Knex.queryBuilder()
         .select("oi.order_id", "oi.quantity", "oi.item_price_at_time","oi.item_name")

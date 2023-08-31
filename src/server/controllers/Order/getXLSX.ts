@@ -7,7 +7,7 @@ import * as yup from "yup";
 import * as path from "path";
 
 interface IQueryProps {
-    created_at?: Date;
+    created_at?: number;
     total_price?: number;
 }
 
@@ -17,7 +17,7 @@ interface IQueryProps {
  */
 export const getXLSXValidation = validation((getSchema) => ({
     query: getSchema<IQueryProps>(yup.object().shape({
-        created_at: yup.date().optional(),
+        created_at: yup.number().optional(), //timestamp
         total_price: yup.number().optional().moreThan(0),
     })),
 }));
@@ -32,7 +32,7 @@ export const getXLSX = async (req: Request<{}, {}, {}, IQueryProps>, res: Respon
 
     const data = await OrderProvider.getXLSX(
         user_id,
-        req.query.created_at ? new Date(req.query.created_at) : new Date(0),
+        req.query.created_at || 0,
         req.query.total_price || 0
     );
 

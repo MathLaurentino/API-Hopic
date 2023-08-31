@@ -1,6 +1,6 @@
 import { Knex } from "../../knex";
 import {ETableNames} from "../../ETableNames";
-import { NotFoundError } from "../../../shared/services/ApiErrors";
+import {  UnauthorizedError } from "../../../shared/services/ApiErrors";
 import { IItem } from "../../models";
 
 export const getbyId = async (id: number): Promise<IItem> => {
@@ -11,6 +11,5 @@ export const getbyId = async (id: number): Promise<IItem> => {
         return result;
     } 
 
-    throw new NotFoundError("Id inválido");
-    
+    throw new UnauthorizedError("item_id: " + id + " inválido para esse usuário");    
 };

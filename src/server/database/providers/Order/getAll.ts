@@ -6,14 +6,14 @@ import { IOrder } from "../../models";
 
 interface IOrderBD extends Omit<IOrder, "user_id"> {}
 
-export const getAll = async (user_id: number, page: number, limit: number, id = 0, created_at: Date, total_price: number): Promise<IOrderBD[]> => {
+export const getAll = async (user_id: number, page: number, limit: number, id = 0, created_at: number, total_price: number): Promise<IOrderBD[]> => {
   
     // const result = await Knex(ETableNames.order).select("*").where("user_id", user_id);
 
     const result = await Knex(ETableNames.order)
         .select("id", "total_price", "created_at")
         .where("user_id", user_id)
-        .andWhere("created_at", ">=", created_at)
+        .andWhere("created_at", ">=", created_at) // timestamp
         .andWhere("total_price", ">=", total_price)
         .offset((page - 1) * limit)
         .limit(limit);

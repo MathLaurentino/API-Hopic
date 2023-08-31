@@ -24,7 +24,8 @@ export const create = async (req: Request<{}, {}, IBodyProps[]>, res: Response):
 
     // cria a "Ordem"
     const created_at: Date = new Date();
-    const order_id = await OrderProvider.create({ user_id, total_price, created_at });
+    const timestamp: number = created_at.getTime();
+    const order_id = await OrderProvider.create({ user_id, total_price, created_at: timestamp });
 
     // cria os "Order_item" do "Order"
     for (let x = 0; x < orderItemArray.length; x++) {
