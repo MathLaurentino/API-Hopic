@@ -17,6 +17,7 @@ export const updateByIdValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({
         name: yup.string().required().min(2),
         price: yup.number().required().moreThan(0),
+        color: yup.string().required().min(6).max(6),
     })),
     params: getSchema<IParamProps>(yup.object().shape({
         id: yup.number().integer().required().moreThan(0),
@@ -26,7 +27,7 @@ export const updateByIdValidation = validation((getSchema) => ({
 
 export const updateById = async (req: Request<IParamProps, {}, IBodyProps>, res: Response): Promise<Response> => {
 
-    const { name, price } = req.body;
+    const { name, price, color } = req.body;
     const produtoId = Number(req.params.id);
     const user_id = Number(req.headers.user_id); 
 
@@ -44,7 +45,7 @@ export const updateById = async (req: Request<IParamProps, {}, IBodyProps>, res:
             removeImageFromFileSystem(userProduto.imageAddress);
         }
 
-        await ItemProvider.updateById(produtoId, { name, price, imageAddress });
+        await ItemProvider.updateById(produtoId, { name, price, color, imageAddress });
         return res.status(StatusCodes.NO_CONTENT).send();
 
     }

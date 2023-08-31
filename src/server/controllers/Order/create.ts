@@ -10,12 +10,6 @@ interface IBodyProps {
     quantity: number;
 }
 
-// interface IOrderItemArray extends Omit<IOrderItem, "id" | "order_id"> {}
-export interface IOrderItemArray{
-    item_name: string;
-    quantity: number;
-    item_price_at_time: number;
-}
 
 /**
  * Cria um novo pedido associado a um usuário e seus itens.
@@ -23,7 +17,7 @@ export interface IOrderItemArray{
 export const create = async (req: Request<{}, {}, IBodyProps[]>, res: Response): Promise<Response> => {
 
     // Extração dos dados da requisição
-    const inputData: IBodyProps[] = req.body;
+    const inputData = req.body;
     const user_id = Number(req.headers.user_id);
     
     const [orderItemArray, total_price] = await createOrderItemArray(inputData, user_id);
@@ -40,6 +34,17 @@ export const create = async (req: Request<{}, {}, IBodyProps[]>, res: Response):
     // Resposta com o order_id do pedido criado
     return res.status(StatusCodes.OK).json(order_id);
 };
+
+
+
+// interface IOrderItemArray extends Omit<IOrderItem, "id" | "order_id"> {}
+export interface IOrderItemArray{
+    item_id: number; // fk
+    item_name: string;
+    quantity: number;
+    item_price_at_time: number;
+}
+
 
 
 /**
@@ -70,7 +75,7 @@ const createOrderItemArray = async (inputData: IBodyProps[], user_id: number): P
         const item_name = item_data.name;
         const quantity = productInput.quantity;
         const item_price_at_time = item_data.price;
-        orderItemArray[x] = { item_name, quantity, item_price_at_time };
+        orderItemArray[x] = { item_name, quantity, item_price_at_time, item_id };
 
         // calcula o total_price do Oreder
         total_price += item_price_at_time * quantity;
@@ -81,6 +86,7 @@ const createOrderItemArray = async (inputData: IBodyProps[], user_id: number): P
     return [orderItemArray, total_price];
 
 };
+
 
 
 export const createValidation = (req: Request<{}, {}, IBodyProps[]>, res: Response, next: NextFunction) => {

@@ -9,14 +9,15 @@ interface IBodyProps extends Omit<IItem, "id" | "user_id" | "imageAddress"> {}
 
 export const createValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({
-        name: yup.string().required().min(2),
+        name: yup.string().required().min(2).max(100),
         price: yup.number().required().moreThan(0),
+        color: yup.string().required().min(6).max(6),
     })),
 })); 
 
 export const create = async (req: Request<{}, {}, IBodyProps>, res: Response): Promise<Response> => {
 
-    const { name, price } = req.body;
+    const { name, price, color } = req.body;
     const user_id = Number(req.headers.user_id); 
 
     let imageAddress:string | null = null;
@@ -25,10 +26,11 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response): P
     }
 
     const result = await ItemProvider.create({
-        name: name, 
-        price: price,
-        user_id: user_id,
-        imageAddress: imageAddress,
+        name,
+        price,
+        user_id,
+        color,
+        imageAddress,
     });
 
     return res.status(StatusCodes.CREATED).json(result); // devolve o id criado
