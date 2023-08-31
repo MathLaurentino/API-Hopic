@@ -7,8 +7,8 @@ export const sanitizeInput = (req: Request, res: Response, next: NextFunction) =
         for (const key in req.body) {
             if (typeof req.body[key] === "string") {
             
-                let sanitizedString = req.body[key].replace(/[^\w\sÀ-ú]/giu, "");
-                sanitizedString = sanitizedString.trim();
+                let sanitizedString = req.body[key].replace(/[";]/g, "");
+                sanitizedString = req.body[key].trim();
 
                 req.body[key] = sanitizedString;
             }
