@@ -132,8 +132,7 @@ const applyCellStyles = (worksheet: ExcelJS.Worksheet): void => {
 };
 
 
-const formatDataTime = (timestempMicroseconds: number): [string, string] => {
-    const timestemp = Number(timestempMicroseconds) / 1000; //milliseconds 
+const formatDataTime = (timestemp: number): [string, string] => {
     const dateTime = new Date(timestemp);
 
     const day = String(dateTime.getDate()).padStart(2, "0");
