@@ -24,7 +24,7 @@ export const create = async (req: Request<{}, {}, IBodyProps[]>, res: Response):
 
     // cria a "Ordem"
     const created_at: Date = new Date();
-    const timestamp: number = created_at.getTime();
+    const timestamp: number = created_at.getTime() * 1000; // convertendo milissegundos em microssegundos
     const order_id = await OrderProvider.create({ user_id, total_price, created_at: timestamp });
 
     // cria os "Order_item" do "Order"
