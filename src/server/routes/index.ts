@@ -24,7 +24,8 @@ router.get("/produtos", ensureAuthenticated, ItemController.getAll);
 
 router.post("/Order", ensureAuthenticated, OrderController.createValidation, OrderController.create);
 router.get("/Order", ensureAuthenticated, OrderController.getAllValidation, OrderController.getAll);
-router.get("/getXLSX", ensureAuthenticated, OrderController.getXLSXValidation, OrderController.getXLSX);
+router.get("/getItemSalesXLSX", ensureAuthenticated, OrderController.getItemSaleXLSXValidation,OrderController.getItemSaleXLSX);
+router.get("/getOrderSalesXLSX", ensureAuthenticated, OrderController.getOrderSalesXSLXValidation, OrderController.getOrderSalesXSLX);
 
 router.get("/OrderItem/:order_id", ensureAuthenticated, OrderItemController.getByOrderIdValidation, OrderItemController.getByOrderId);
 
