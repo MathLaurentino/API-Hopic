@@ -84,7 +84,7 @@ const createDataForExcel = (data: ISalesData[]): [(string | number)[][], number]
             dataExcel.push(row);
         }
 
-        allTotalPriceOrders += element.total_price;
+        allTotalPriceOrders += Number(element.total_price);
     });
 
     return [dataExcel, allTotalPriceOrders];
