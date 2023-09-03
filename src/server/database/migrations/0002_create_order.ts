@@ -15,7 +15,7 @@ export async function up(knex: Knex) {
                 .onUpdate("CASCADE") // caso o id da cidade seja mudado, muda aqui também
                 .onDelete("RESTRICT"); // não deixa que o registro user seja apagado
             table.decimal("total_price", 10, 2).notNullable();
-            table.integer("created_at").notNullable(); // timestemp
+            table.bigint("created_at").notNullable(); // timestemp
 
             table.comment("Tabela usada para armazenar Orders do sistema.");
         })
