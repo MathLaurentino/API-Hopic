@@ -31,7 +31,7 @@ export const createXLSXfile = async (data: XLSXData[]): Promise<string> => {
         worksheet.addRow(rowData);
     });
 
-    const lestRow = ["-", "-", "-", "-", "-", "-", "-", "-", "R$ "+allTotalPriceOrders.toFixed(2)];
+    const lestRow = ["-", "-", "-", "-", "-", "-", "-", "-", "R$ "+ Number(allTotalPriceOrders).toFixed(2)];
     worksheet.addRow(lestRow);
 
     applyColumnWidths(worksheet, headers);
@@ -59,9 +59,9 @@ const createDataForExcel = (data: XLSXData[]): [(string | number)[][], number] =
         element.order_items.forEach(item => {
             const row = [
                 element.order_id, date, time, item.item_name, 
-                item.quantity, "R$ "+item.item_price_at_time.toFixed(2), 
-                "R$ "+(item.quantity * item.item_price_at_time).toFixed(2), 
-                "R$ "+element.total_price.toFixed(2), "-"
+                item.quantity, "R$ "+ Number(item.item_price_at_time).toFixed(2), 
+                "R$ "+ Number(item.quantity * item.item_price_at_time).toFixed(2), 
+                "R$ "+ Number(element.total_price).toFixed(2), "-"
             ];
             dataExcel.push(row);
         });
