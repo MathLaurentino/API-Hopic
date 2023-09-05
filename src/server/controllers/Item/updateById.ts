@@ -11,7 +11,7 @@ interface IParamProps {
     id?: number;
 }
 
-interface IBodyProps extends Omit<IItem, "id" | "user_id" | "imageAddress"> {}
+interface IBodyProps extends Omit<IItem, "id" | "user_id" | "imageAddress" | "visibility"> {}
 
 export const updateByIdValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({

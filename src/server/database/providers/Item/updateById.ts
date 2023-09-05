@@ -3,7 +3,7 @@ import { ETableNames } from "../../ETableNames";
 import { Knex } from "../../knex";
 import { IItem } from "../../models";
 
-export const updateById = async (itemId: number, itemData: Omit<IItem, "id" | "user_id">): Promise<void> => {
+export const updateById = async (itemId: number, itemData: Partial<Omit<IItem, "id" | "user_id">>): Promise<void> => {
 
     const result = await Knex(ETableNames.item).where("id", itemId).update(itemData);
 

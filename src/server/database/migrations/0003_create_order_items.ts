@@ -19,7 +19,7 @@ export async function up(knex: Knex) {
                 .references("id")
                 .inTable(ETableNames.item) // faz referencia a tabela item campo "id"
                 .onUpdate("CASCADE") // caso o id da item seja mudado, muda aqui também
-                .onDelete("SET NULL");
+                .onDelete("RESTRICT"); // não deixa que o registro item seja apagado
             table.integer("quantity").notNullable();
             table.string("item_name").notNullable();
             table.decimal("item_price_at_time", 10, 2).notNullable();

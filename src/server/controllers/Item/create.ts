@@ -5,7 +5,7 @@ import { validation } from "../../shared/middleware/Validation";
 import { ItemProvider } from "../../database/providers/Item";
 import * as yup from "yup";
 
-interface IBodyProps extends Omit<IItem, "id" | "user_id" | "imageAddress"> {}
+interface IBodyProps extends Omit<IItem, "id" | "user_id" | "imageAddress" | "visibility"> {}
 
 export const createValidation = validation((getSchema) => ({
     body: getSchema<IBodyProps>(yup.object().shape({
@@ -24,11 +24,13 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response): P
     if (req.file) {
         imageAddress = req.file.filename;
     }
+    const visibility = true;
 
     const result = await ItemProvider.create({
         name,
         price,
         user_id,
+        visibility,
         color,
         imageAddress,
     });

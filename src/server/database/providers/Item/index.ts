@@ -5,6 +5,7 @@ import * as deleteById from "./deleteById";
 import * as updateById from "./updateById";
 import * as validateClientAccess from "./validateClientAccess";
 import * as validateImgClientAccess from "./validateImgClientAccess";
+import * as checkForeignKeyRelation from "./checkForeignKeyRelation";
 
 export const ItemProvider = {
     ...create,
@@ -14,4 +15,5 @@ export const ItemProvider = {
     ...updateById,
     ...validateClientAccess,
     ...validateImgClientAccess,
+    ...checkForeignKeyRelation,
 };

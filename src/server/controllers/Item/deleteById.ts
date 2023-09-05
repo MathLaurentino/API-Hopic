@@ -18,19 +18,32 @@ export const deleteByIdValidation = validation((getSchema) => ({
 
 export const deleteById = async (req: Request<IParamsProps>, res: Response): Promise<Response> => {
 
-    const produtoId = req.params.id;
+    const itemId = req.params.id;
     const userId = Number(req.headers.user_id);
 
-    if (typeof produtoId  === "undefined") {
+    if (typeof itemId  === "undefined") {
         throw new BadRequestError("Parâmetro 'id' precisa ser informado");
     }
 
-    const isClientAuthorized = await  ItemProvider.validateClientAccess(produtoId, userId);
+    const isClientAuthorized = await  ItemProvider.validateClientAccess(itemId, userId);
 
-    if (isClientAuthorized) {
-        const userProduto = await ItemProvider.getbyId(produtoId);
+    if (!isClientAuthorized) {
+        throw new UnauthorizedError("Alteração negada");
+    }
 
-        await ItemProvider.deleteById(produtoId);
+    const itemVisibility: boolean = await ItemProvider.checkForeignKeyRelation(itemId);
+
+    /**Se o item já tiver relação com algum elemento da tabela orderItem, 
+     * apenas é mudada a visibilidade para false */
+    if (itemVisibility) {
+
+        await ItemProvider.updateById(itemId, {visibility: false});
+        return res.status(StatusCodes.OK).send();
+        
+    } else {
+        
+        const userProduto = await ItemProvider.getbyId(itemId);
+        await ItemProvider.deleteById(itemId);
 
         // se o produto tem uma img no sistema, ele é apagado
         if (userProduto.imageAddress) { 
@@ -38,8 +51,6 @@ export const deleteById = async (req: Request<IParamsProps>, res: Response): Pro
         }
         
         return res.status(StatusCodes.OK).send();
+
     }
-
-    throw new UnauthorizedError("Alteração negada");
-
 };
