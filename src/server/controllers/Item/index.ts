@@ -4,6 +4,7 @@ import * as getById from "./getById";
 import * as deleteById from "./deleteById";
 import * as updateById from "./updateById";
 import * as getImg from "./getImg";
+import * as getItemSales from "./getItemSales";
 
 export const ItemController = {
     ...create,
@@ -12,4 +13,5 @@ export const ItemController = {
     ...deleteById,
     ...updateById,
     ...getImg,
+    ...getItemSales,
 };

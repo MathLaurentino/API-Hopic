@@ -20,6 +20,7 @@ router.post("/produtos", ensureAuthenticated, uploadImage.single("image"), sanit
 router.delete("/produtos/:id", ensureAuthenticated, ItemController.deleteByIdValidation, ItemController.deleteById);
 router.get("/produtos/:id", ensureAuthenticated, ItemController.getByIdValidation, ItemController.getById);
 router.get("/getImg/:imageAddress", ensureAuthenticated, ItemController.getImgValidation, ItemController.getImg);
+router.get("/getItemSales", ensureAuthenticated, ItemController.getItemSalesValidation, ItemController.getItemSales);
 router.get("/produtos", ensureAuthenticated, ItemController.getAll);
 
 router.post("/Order", ensureAuthenticated, OrderController.createValidation, OrderController.create);
