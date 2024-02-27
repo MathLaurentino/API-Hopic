@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { OrderProvider } from "../../database/providers/Order";
 import { validation } from "../../shared/middleware";
-import  { myModules } from "../../shared/modules";
+import { myModules } from "../../shared/modules";
 import * as yup from "yup";
+import { StatusCodes } from "http-status-codes";
 
 interface IQueryProps {
     created_at?: number;
@@ -13,16 +14,20 @@ interface IQueryProps {
  * @middleware
  */
 export const getItemSaleXLSXValidation = validation((getSchema) => ({
-    query: getSchema<IQueryProps>(yup.object().shape({
-        created_at: yup.number().optional(), //timestamp
-    })),
+    query: getSchema<IQueryProps>(
+        yup.object().shape({
+            created_at: yup.number().optional(), //timestamp
+        })
+    ),
 }));
-
 
 /**
  * Gera e envia um arquivo XLSX de relatório de produtos.
  */
-export const getItemSaleXLSX = async (req: Request<{}, {}, {}, IQueryProps>, res: Response): Promise<void> => {
+export const getItemSaleXLSX = async (
+    req: Request<{}, {}, {}, IQueryProps>,
+    res: Response
+): Promise<Response> => {
     const user_id = Number(req.headers.user_id);
 
     const data = await OrderProvider.getItemSalesData(
@@ -30,10 +35,12 @@ export const getItemSaleXLSX = async (req: Request<{}, {}, {}, IQueryProps>, res
         req.query.created_at || 0
     );
 
-    const xlsxFilePath = await myModules.createItemSalesXLSX(data);
+    return res.status(StatusCodes.OK).json(data);
 
-    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    res.setHeader("Content-Disposition", "attachment; filename=relatorio_produtos.xlsx");
+    // const xlsxFilePath = await myModules.createItemSalesXLSX(data);
 
-    return res.sendFile(xlsxFilePath);
+    // res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    // res.setHeader("Content-Disposition", "attachment; filename=relatorio_produtos.xlsx");
+
+    // return res.sendFile(xlsxFilePath);
 };
