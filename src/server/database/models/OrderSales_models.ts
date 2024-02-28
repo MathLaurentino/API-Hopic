@@ -6,9 +6,10 @@ interface ISalesOrderData {
 
 interface ISalesOrderItemData {
     order_id: number;
+    item_id: number;
+    item_name: string;
     quantity: number;
     item_price_at_time: number;
-    item_name: string;
 }
   
 

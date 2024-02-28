@@ -49,9 +49,10 @@ const getOrder = async (user_id: number,created_at: number, total_price: number)
 const getOrderItem = async (user_id: number, created_at: number, total_price: number): Promise<ISalesOrderItemData[]> => {
   
     const result: ISalesOrderItemData[] = await Knex.queryBuilder()
-        .select("oi.order_id", "oi.quantity", "oi.item_price_at_time","oi.item_name")
+        .select("oi.order_id", "i.id as item_id", "i.name as item_name", "oi.quantity", "oi.item_price_at_time")
         .from(ETableNames.order + " as o")
         .innerJoin(ETableNames.orderItem + " as oi", "o.id", "oi.order_id")
+        .innerJoin(ETableNames.item + " as i", "oi.item_id", "i.id")
         .where("o.user_id", user_id)
         .andWhere("o.created_at", ">=", created_at)
         .andWhere("o.total_price", ">=", total_price);
@@ -81,9 +82,10 @@ function combineData(orders: ISalesOrderData[], orderItems: ISalesOrderItemData[
             total_price: order.total_price,
             created_at: order.created_at,
             order_items: orderItemsForOrder.map(item => ({
+                item_id: item.item_id,
+                item_name: item.item_name,
                 quantity: item.quantity,
                 item_price_at_time: item.item_price_at_time,
-                item_name: item.item_name,
             })),
         });
     });

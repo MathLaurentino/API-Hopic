@@ -20,7 +20,7 @@ export const create = async (req: Request<{}, {}, IBodyProps[]>, res: Response):
     const inputData = req.body;
     const user_id = Number(req.headers.user_id);
     
-    const [orderItemArray, total_price] = await createOrderItemArray(inputData, user_id);
+    const [order_itemArray, total_price] = await createOrderItemArray(inputData, user_id);
 
     // cria a "Ordem"
     const created_at: Date = new Date();
@@ -28,8 +28,8 @@ export const create = async (req: Request<{}, {}, IBodyProps[]>, res: Response):
     const order_id = await OrderProvider.create({ user_id, total_price, created_at: timestamp });
 
     // cria os "Order_item" do "Order"
-    for (let x = 0; x < orderItemArray.length; x++) {
-        await OrderItemProvider.create({ ...orderItemArray[x], order_id });
+    for (let x = 0; x < order_itemArray.length; x++) {
+        await OrderItemProvider.create({ ...order_itemArray[x], order_id });
     }
 
     // Resposta com o order_id do pedido criado
@@ -41,7 +41,6 @@ export const create = async (req: Request<{}, {}, IBodyProps[]>, res: Response):
 // interface IOrderItemArray extends Omit<IOrderItem, "id" | "order_id"> {}
 export interface IOrderItemArray{
     item_id: number; // fk
-    item_name: string;
     quantity: number;
     item_price_at_time: number;
 }
@@ -58,7 +57,7 @@ export interface IOrderItemArray{
 const createOrderItemArray = async (inputData: IBodyProps[], user_id: number): Promise<[IOrderItemArray[], number]> => {
 
     // Estrutura para armazenar os itens do pedido
-    const orderItemArray: IOrderItemArray[] = []; // para o OrerItem
+    const order_itemArray: IOrderItemArray[] = []; // para o OrerItem
     let total_price: number = 0; // para o Order
 
     let x: number = 0;
@@ -73,10 +72,9 @@ const createOrderItemArray = async (inputData: IBodyProps[], user_id: number): P
         }
 
         // armazena os dados da tabela "order_item"
-        const item_name = item_data.name;
         const quantity = productInput.quantity;
         const item_price_at_time = item_data.price;
-        orderItemArray[x] = { item_name, quantity, item_price_at_time, item_id };
+        order_itemArray[x] = { quantity, item_price_at_time, item_id };
 
         // calcula o total_price do Oreder
         total_price += item_price_at_time * quantity;
@@ -84,7 +82,7 @@ const createOrderItemArray = async (inputData: IBodyProps[], user_id: number): P
         x++;
     }
 
-    return [orderItemArray, total_price];
+    return [order_itemArray, total_price];
 
 };
 

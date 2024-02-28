@@ -1,13 +1,6 @@
 import { Knex } from "../../knex";
 import {ETableNames} from "../../ETableNames";
-
-
-export interface ItemSalesData {
-    id: number,
-    name: string,
-    item_price_at_time: number,
-    quantity: number,
-}
+import { ItemSalesData } from "../../models";
 
 
 /**

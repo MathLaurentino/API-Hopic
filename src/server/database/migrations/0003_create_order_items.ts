@@ -21,7 +21,6 @@ export async function up(knex: Knex) {
                 .onUpdate("CASCADE") // caso o id da item seja mudado, muda aqui também
                 .onDelete("SET NULL");
             table.integer("quantity").notNullable();
-            table.string("item_name").notNullable();
             table.decimal("item_price_at_time", 10, 2).notNullable();
 
             table.comment("Tabela usada para armazenar OrderItems do sistema.");

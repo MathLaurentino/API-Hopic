@@ -1,14 +1,7 @@
 import { applyColumnWidths, applyCellStyles } from "./addStyleToXLSX";
 import * as ExcelJS from "exceljs";
 import * as path from "path";
-
-
-export interface ItemSalesData {
-    id: number,
-    name: string,
-    item_price_at_time: number,
-    quantity: number,
-}
+import { ItemSalesData } from "../../../database/models";
 
 
 /**
