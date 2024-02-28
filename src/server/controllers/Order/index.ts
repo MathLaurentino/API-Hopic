@@ -1,11 +1,11 @@
 import * as create from "./create";
 import * as getAll from "./getAll";
-import * as getOrderSalesXSLX from "./getOrderSalesXSLX";
-import * as getItemSaleXLSX from "./getItemSaleXLSX";
+import * as getItemSales from "./getItemSales";
+import * as getOrderSales from "./getOrderSales";
 
 export const OrderController = {
     ...create,
     ...getAll,
-    ...getOrderSalesXSLX,
-    ...getItemSaleXLSX,
+    ...getItemSales,
+    ...getOrderSales,
 };
