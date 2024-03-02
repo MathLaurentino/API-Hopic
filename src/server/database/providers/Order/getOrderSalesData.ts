@@ -8,13 +8,14 @@ import { StatusCodes } from "http-status-codes";
  * Retorna os dados de relatorio de vendas com base nos critérios fornecidos.
  * @param user_id - ID do usuário associado aos pedidos.
  * @param created_at - Data de criação mínima dos pedidos.
+ * @param end_date - Data de criação final dos pedidos.
  * @param total_price - Preço total mínimo dos pedidos.
  * @returns Uma Promise que resolve em um array de objetos ISalesData.
  */
-export const getOrderSalesData = async (user_id: number, created_at: number, total_price: number): Promise<ISalesData[]> => {
+export const getOrderSalesData = async (user_id: number, created_at: number, end_date: number, total_price: number): Promise<ISalesData[]> => {
     
-    const orderData = await getOrder(user_id, created_at, total_price);
-    const orderItemData = await getOrderItem(user_id, created_at, total_price);
+    const orderData = await getOrder(user_id, created_at, end_date, total_price);
+    const orderItemData = await getOrderItem(user_id, created_at, end_date, total_price);
 
     const ISalesData = combineData(orderData, orderItemData);
 
@@ -23,15 +24,16 @@ export const getOrderSalesData = async (user_id: number, created_at: number, tot
 
 
 /**
- * Obtém os dados do pedido baseados em critérios como user_id, data de criação e preço total.
+ * Obtém os dados do pedido baseados em critérios como user_id, data de criação, data final e preço total.
  */
-const getOrder = async (user_id: number,created_at: number, total_price: number): Promise<ISalesOrderData[]> => {
+const getOrder = async (user_id: number,created_at: number, end_date: number, total_price: number): Promise<ISalesOrderData[]> => {
     
     const result: ISalesOrderData[] = await Knex(ETableNames.order)
         .select("o.id", "o.total_price", "o.created_at")
         .from(ETableNames.order + " as o")
         .where("o.user_id", user_id)
         .andWhere("created_at", ">=", created_at)
+        .andWhere("o.created_at", "<=", end_date)
         .andWhere("total_price", ">=", total_price);
     
     if (result.length > 0) {
@@ -44,9 +46,9 @@ const getOrder = async (user_id: number,created_at: number, total_price: number)
 
 
 /**
- * Obtém os dados dos itens de pedido baseados em critérios como user_id, data de criação e preço total.
+ * Obtém os dados dos itens de pedido baseados em critérios como user_id, data de criação, data final e preço total.
  */
-const getOrderItem = async (user_id: number, created_at: number, total_price: number): Promise<ISalesOrderItemData[]> => {
+const getOrderItem = async (user_id: number, created_at: number, end_date: number, total_price: number): Promise<ISalesOrderItemData[]> => {
   
     const result: ISalesOrderItemData[] = await Knex.queryBuilder()
         .select("oi.order_id", "i.id as item_id", "i.name as item_name", "oi.quantity", "oi.item_price_at_time")
@@ -55,6 +57,7 @@ const getOrderItem = async (user_id: number, created_at: number, total_price: nu
         .innerJoin(ETableNames.item + " as i", "oi.item_id", "i.id")
         .where("o.user_id", user_id)
         .andWhere("o.created_at", ">=", created_at)
+        .andWhere("o.created_at", "<=", end_date)
         .andWhere("o.total_price", ">=", total_price);
 
 
@@ -68,8 +71,7 @@ const getOrderItem = async (user_id: number, created_at: number, total_price: nu
 
 
 /**
- * Combina os dados de pedidos e itens de pedidos em uma estrutura de dados especifica que
- * fascilita o processo de criação do XLSX posteriormente
+ * Combina os dados de pedidos e itens de pedidos na seguinte estrutura: ISalesData[]
  */
 function combineData(orders: ISalesOrderData[], orderItems: ISalesOrderItemData[]): ISalesData[] {
     const combinedData: ISalesData[] = [];

@@ -7,6 +7,7 @@ import { myModules } from "../../shared/modules";
 
 interface IQueryProps {
     created_at?: number;
+    end_date?: number;
 }
 
 /**
@@ -17,6 +18,7 @@ export const getItemSalesValidation = validation((getSchema) => ({
     query: getSchema<IQueryProps>(
         yup.object().shape({
             created_at: yup.number().optional(), //timestamp
+            end_date: yup.number().optional(), //timestamp
         })
     ),
 }));
@@ -28,9 +30,13 @@ export const getItemSalesValidation = validation((getSchema) => ({
 export const getItemSales = async ( req: Request<{}, {}, {}, IQueryProps>, res: Response ): Promise<Response> => {
     const user_id = Number(req.headers.user_id);
 
+    const timeNow: Date = new Date();
+    const TimeNowTimestamp: number = timeNow.getTime();
+
     const data = await OrderProvider.getItemSalesData(
         user_id,
-        req.query.created_at || 0
+        req.query.created_at || 0,
+        req.query.end_date || TimeNowTimestamp
     );
 
     return res.status(StatusCodes.OK).json(data);
@@ -43,9 +49,13 @@ export const getItemSales = async ( req: Request<{}, {}, {}, IQueryProps>, res: 
 export const getItemSalesXLSX = async ( req: Request<{}, {}, {}, IQueryProps>, res: Response ): Promise<void> => {
     const user_id = Number(req.headers.user_id);
 
+    const timeNow: Date = new Date();
+    const TimeNowTimestamp: number = timeNow.getTime();
+
     const data = await OrderProvider.getItemSalesData(
         user_id,
-        req.query.created_at || 0
+        req.query.created_at || 0,
+        req.query.end_date || TimeNowTimestamp
     );
 
     const xlsxFilePath = await myModules.createItemSalesXLSX(data);

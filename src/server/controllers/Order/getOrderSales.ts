@@ -7,6 +7,7 @@ import { myModules } from "../../shared/modules";
 
 interface IQueryProps {
     created_at?: number;
+    end_date?: number;
     total_price?: number;
 }
 
@@ -18,6 +19,7 @@ export const getOrderSalesValidation = validation((getSchema) => ({
     query: getSchema<IQueryProps>(
         yup.object().shape({
             created_at: yup.number().optional(), //timestamp
+            end_date: yup.number().optional(), //timestamp
             total_price: yup.number().optional().moreThan(0),
         })
     ),
@@ -31,9 +33,13 @@ export const getOrderSales = async ( req: Request<{}, {}, {}, IQueryProps>, res:
 
     const user_id = Number(req.headers.user_id);
 
+    const timeNow: Date = new Date();
+    const TimeNowTimestamp: number = timeNow.getTime();
+
     const orderSalesData = await OrderProvider.getOrderSalesData(
         user_id,
         req.query.created_at || 0,
+        req.query.end_date || TimeNowTimestamp,
         req.query.total_price || 0
     );
 
@@ -48,9 +54,13 @@ export const getOrderSalesXSLX = async ( req: Request<{}, {}, {}, IQueryProps>, 
 
     const user_id = Number(req.headers.user_id);
 
+    const timeNow: Date = new Date();
+    const TimeNowTimestamp: number = timeNow.getTime();
+
     const orderSalesData = await OrderProvider.getOrderSalesData(
         user_id,
         req.query.created_at || 0,
+        req.query.end_date || TimeNowTimestamp,
         req.query.total_price || 0
     );
 
