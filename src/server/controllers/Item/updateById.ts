@@ -5,7 +5,7 @@ import { IItem } from "../../database/models";
 import { validation } from "../../shared/middleware/Validation";
 import { removeImageFromFileSystem } from "../../shared/services";
 import { ItemProvider } from "../../database/providers/Item";
-import { UnauthorizedError } from "../../shared/services/ApiErrors";
+import { ApiError, UnauthorizedError } from "../../shared/services/ApiErrors";
 
 interface IParamProps {
     id?: number;
@@ -38,18 +38,23 @@ export const updateById = async (req: Request<IParamProps, {}, IBodyProps>, res:
 
     const isClientAuthorized = await  ItemProvider.validateClientAccess(produtoId, user_id);
 
-    if (isClientAuthorized) {
-
-        const userProduto = await ItemProvider.getbyId(produtoId);
-        if (userProduto.imageAddress) { // se o produto tem uma img no sistema, ele é apagado
-            removeImageFromFileSystem(userProduto.imageAddress);
-        }
-
-        await ItemProvider.updateById(produtoId, { name, price, color, imageAddress });
-        return res.status(StatusCodes.NO_CONTENT).send();
-
+    if (!isClientAuthorized) {
+        throw new UnauthorizedError("Alteração negada");
     }
 
-    throw new UnauthorizedError("Alteração negada");
+    const itens: IItem[] = await ItemProvider.getAll(user_id);
+    itens.forEach(item => {
+        if (item.name.toUpperCase() == name.toUpperCase() && item.id != produtoId) {
+            throw new ApiError("Nome de item já em uso", 409);
+        }
+    });
+    
+    const userProduto = await ItemProvider.getbyId(produtoId);
+    if (userProduto.imageAddress) { // se o produto tem uma img no sistema, ele é apagado
+        removeImageFromFileSystem(userProduto.imageAddress);
+    }
+
+    await ItemProvider.updateById(produtoId, { name, price, color, imageAddress });
+    return res.status(StatusCodes.NO_CONTENT).send();
 
 };

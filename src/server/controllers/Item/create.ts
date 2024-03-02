@@ -4,6 +4,7 @@ import { IItem } from "../../database/models";
 import { validation } from "../../shared/middleware/Validation";
 import { ItemProvider } from "../../database/providers/Item";
 import * as yup from "yup";
+import { ApiError } from "../../shared/services";
 
 interface IBodyProps extends Omit<IItem, "id" | "user_id" | "imageAddress"> {}
 
@@ -24,6 +25,14 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response): P
     if (req.file) {
         imageAddress = req.file.filename;
     }
+
+    const itens: IItem[] = await ItemProvider.getAll(user_id);
+
+    itens.forEach(item => {
+        if (item.name.toUpperCase() == name.toUpperCase()) {
+            throw new ApiError("Nome de item já em uso", 409);
+        }
+    });
 
     const result = await ItemProvider.create({
         name,

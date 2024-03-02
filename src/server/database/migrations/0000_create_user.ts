@@ -16,8 +16,8 @@ export async function up(knex: Knex) {
             table.string("email").index().unique().notNullable().checkLength(">=", 5);
             table.string("password").notNullable().checkLength(">=", 6);
             table.boolean("isValid").notNullable();
-            table.string("uniqueStringEmail");
-            table.string("uniqueStringPassword");
+            table.string("uniqueStringEmail").unique();
+            table.string("uniqueStringPassword").unique();
 
             table.comment("Tabela usada para armazenar usuarios do sistema.");
         })
