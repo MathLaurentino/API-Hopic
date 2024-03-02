@@ -4,5 +4,6 @@ export interface IItem{
     name: string;
     price: number;
     color: string;
+    shortCut: string;
     imageAddress:string | null;
 }

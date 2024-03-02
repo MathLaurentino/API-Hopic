@@ -13,12 +13,13 @@ export const createValidation = validation((getSchema) => ({
         name: yup.string().required().min(2).max(100),
         price: yup.number().required().moreThan(0),
         color: yup.string().required().min(6).max(6),
+        shortCut: yup.string().required().min(1).max(30),
     })),
 })); 
 
 export const create = async (req: Request<{}, {}, IBodyProps>, res: Response): Promise<Response> => {
 
-    const { name, price, color } = req.body;
+    const { name, price, color, shortCut } = req.body;
     const user_id = Number(req.headers.user_id); 
 
     let imageAddress:string | null = null;
@@ -32,6 +33,9 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response): P
         if (item.name.toUpperCase() == name.toUpperCase()) {
             throw new ApiError("Nome de item já em uso", 409);
         }
+        if (item.shortCut.toUpperCase() == shortCut.toUpperCase()) {
+            throw new ApiError("ShortCut de item já em uso", 409);
+        }
     });
 
     const result = await ItemProvider.create({
@@ -39,9 +43,9 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response): P
         price,
         user_id,
         color,
+        shortCut,
         imageAddress,
     });
 
     return res.status(StatusCodes.CREATED).json(result); // devolve o id criado
-    
 };
