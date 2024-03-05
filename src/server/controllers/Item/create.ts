@@ -4,7 +4,7 @@ import { IItem } from "../../database/models";
 import { validation } from "../../shared/middleware/Validation";
 import { ItemProvider } from "../../database/providers/Item";
 import * as yup from "yup";
-import { ApiError } from "../../shared/services";
+import { validateItemUniqueness } from "../../shared/services";
 
 interface IBodyProps extends Omit<IItem, "id" | "user_id" | "imageAddress"> {}
 
@@ -21,22 +21,16 @@ export const create = async (req: Request<{}, {}, IBodyProps>, res: Response): P
 
     const { name, price, color, shortCut } = req.body;
     const user_id = Number(req.headers.user_id); 
-
     let imageAddress:string | null = null;
     if (req.file) {
         imageAddress = req.file.filename;
     }
 
-    const itens: IItem[] = await ItemProvider.getAll(user_id);
-
-    itens.forEach(item => {
-        if (item.name.toUpperCase() == name.toUpperCase()) {
-            throw new ApiError("Nome de item já em uso", 409);
-        }
-        if (item.shortCut.toUpperCase() == shortCut.toUpperCase()) {
-            throw new ApiError("ShortCut de item já em uso", 409);
-        }
-    });
+    const items: IItem[] = await ItemProvider.getAll(user_id);
+    const errors = validateItemUniqueness(items, name, shortCut);
+    if (errors != null) {
+        return res.status(StatusCodes.CONFLICT).json(errors);
+    }
 
     const result = await ItemProvider.create({
         name,

@@ -3,9 +3,9 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { IItem } from "../../database/models";
 import { validation } from "../../shared/middleware/Validation";
-import { removeImageFromFileSystem } from "../../shared/services";
+import { removeImageFromFileSystem, validateItemUniqueness } from "../../shared/services";
 import { ItemProvider } from "../../database/providers/Item";
-import { ApiError, UnauthorizedError } from "../../shared/services/ApiErrors";
+import { UnauthorizedError } from "../../shared/services/ApiErrors";
 
 interface IParamProps {
     id?: number;
@@ -31,7 +31,6 @@ export const updateById = async (req: Request<IParamProps, {}, IBodyProps>, res:
     const { name, price, color, shortCut } = req.body;
     const produtoId = Number(req.params.id);
     const user_id = Number(req.headers.user_id); 
-
     let imageAddress:string | null = null;
     if (req.file) {
         imageAddress = req.file.filename;
@@ -42,15 +41,11 @@ export const updateById = async (req: Request<IParamProps, {}, IBodyProps>, res:
         throw new UnauthorizedError("Alteração negada");
     }
 
-    const itens: IItem[] = await ItemProvider.getAll(user_id);
-    itens.forEach(item => {
-        if (item.name.toUpperCase() == name.toUpperCase() && item.id != produtoId) {
-            throw new ApiError("Nome de item já em uso", 409);
-        }
-        if (item.shortCut.toUpperCase() == shortCut.toUpperCase() && item.id != produtoId) {
-            throw new ApiError("ShortCut de item já em uso", 409);
-        }
-    });
+    const items: IItem[] = await ItemProvider.getAll(user_id);
+    const errors = validateItemUniqueness(items, name, shortCut);
+    if (errors != null) {
+        return res.status(StatusCodes.CONFLICT).json(errors); 
+    }
     
     const userProduto = await ItemProvider.getbyId(produtoId);
     if (userProduto.imageAddress) { // se o produto tem uma img no sistema, ele é apagado
