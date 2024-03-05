@@ -36,6 +36,10 @@ export const signUp = async (req: Request<{}, {}, IBodyProps>, res: Response): P
     const newUserId = await UserProvider.create({name, email, password: hashedPassword, isValid, uniqueStringEmail, uniqueStringPassword});
     await SendEmail.EmailConfirmation(name, email, uniqueStringEmail);
 
-    return res.status(StatusCodes.CREATED).json(newUserId); 
+    if(process.env.NODE_ENV == "production") {
+        return res.status(StatusCodes.CREATED).json(newUserId); 
+    }else { // == dev
+        return res.status(StatusCodes.CREATED).json(uniqueStringEmail); 
+    }
       
 };
